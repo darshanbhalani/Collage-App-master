@@ -37,7 +37,7 @@ class _SettingsState extends State<Settings> {
               },
               child: ListTile(
                 leading: Icon(
-                  Icons.person_3_rounded,
+                  Icons.abc,
                 ),
                 title: Text("Account & Info"),
                 trailing: Icon(Icons.chevron_right),

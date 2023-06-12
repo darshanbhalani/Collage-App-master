@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -9,7 +8,7 @@ import 'package:myapp2/app/util/VariablesFile.dart';
 class ClassChat extends StatefulWidget {
   final String className;
   final String getKey;
-  const ClassChat({super.key, required this.className, required this.getKey});
+  const ClassChat({required this.className, required this.getKey});
 
   @override
   ClassChatState createState() => ClassChatState();

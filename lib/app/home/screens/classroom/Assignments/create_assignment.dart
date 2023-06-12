@@ -15,7 +15,7 @@ import 'assignments_method.dart';
 
 class CreateNewAssignment extends StatefulWidget {
   final String className;
-  const CreateNewAssignment({super.key, required this.className});
+  const CreateNewAssignment({required this.className});
 
   @override
   State<CreateNewAssignment> createState() => _CreateNewAssignmentState();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp2/app/util/Drawer/StudentCorner/StudentRequestPage.dart';
 import 'package:myapp2/app/util/Functions.dart';
 
 class StudentCorner extends StatefulWidget {
@@ -17,8 +18,8 @@ class _StudentCornerState extends State<StudentCorner> {
       ),
       body: ListView(
         children: [
+          ListField(context, null, "Request to Admin", StudentRequestPage()),
           ListField(context, null, "Check Result", ChechResult()),
-          ListField(context, null, "Request to Admin", RequesttoAdmin()),
           ListField(context, null, "Pay Collage Fees", PayCollageFees()),
           ListField(context, null, "Pay Exam Fees", PayExamFees()),
         ],

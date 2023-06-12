@@ -125,20 +125,20 @@ class _UserProfilePageState extends State<UserProfilePage> {
             SizedBox(
               height: 20,
             ),
-            ShowField("$current_user_type ID.", current_user_enrollmentno),
-            ShowField("Name", current_user_name),
-            ShowField("Birth Date", current_user_birthdate),
-            ShowField("Blood Group", current_user_bloodgroup),
-            ShowField("Joining Year", current_user_joining_date),
+            ShowField("$current_user_type ID.", current_user_enrollmentno,false),
+            ShowField("Name", current_user_name,false),
+            ShowField("Birth Date", current_user_birthdate,false),
+            ShowField("Blood Group", current_user_bloodgroup,false),
+            ShowField("Joining Year", current_user_joining_date,false),
             Visibility(
               visible: current_user_type == "Student",
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ShowField("Branch", current_user_branch),
-                    ShowField("Class", current_user_class),
-                    ShowField("Semester", current_user_semester),
-                    ShowField("Validity", current_user_validity),
+                    ShowField("Branch", current_user_branch,false),
+                    ShowField("Class", current_user_class,false),
+                    ShowField("Semester", current_user_semester,false),
+                    ShowField("Validity", current_user_validity,false),
                   ]),
             ),
             Visibility(
@@ -146,12 +146,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ShowField("Department", current_user_department),
+                  ShowField("Department", current_user_department,false),
                 ],
               ),
             ),
-            ShowField("Phone No.", current_user_phoneno),
-            ShowField("Email", current_user_email),
+            ShowField("Phone No.", current_user_phoneno,false),
+            ShowField("Email", current_user_email,false),
             SizedBox(
               height: 10,
             ),

@@ -1,9 +1,12 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp2/app/util/Request/HandleRequest.dart';
 import 'package:random_password_generator/random_password_generator.dart';
-import 'package:rive/rive.dart';
+// import 'package:rive/rive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 import '../Login/LoginChoisePage.dart';
@@ -250,7 +253,7 @@ ButtonField(
   );
 }
 
-ShowField(String _lable, String _value) {
+ShowField(String _lable, String _value,bool _flag) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -262,8 +265,7 @@ ShowField(String _lable, String _value) {
         height: 5,
       ),
       TextFormField(
-        enabled: false,
-        readOnly: true,
+        enabled: _flag,
         decoration: InputDecoration(
           border: OutlineInputBorder(
               borderSide: BorderSide(
@@ -609,8 +611,11 @@ Loading(context) {
       builder: (context) {
         return Container(
             child: Center(
-                child: RiveAnimation.asset("assets/images/loading.riv")));
-        // return Center(child: CircularProgressIndicator(color: Colors.purpleAccent));
+                // child: RiveAnimation.asset("assets/images/loading.riv"),
+                child: CircularProgressIndicator(color: Colors.purpleAccent)
+            ));
+
+        return Center(child: CircularProgressIndicator(color: Colors.purpleAccent));
       });
 }
 
@@ -785,4 +790,81 @@ DeleteAccountPopUp(context, String _lable, Function _function) {
                   child: Text("Yes")),
             ]);
       });
+}
+
+Future SubmitRequest(String _title,String _purpose) async {
+  var request_time = DateTime.now();
+  await FirebaseFirestore.instance
+      .collection("Pending Request").doc("${current_user_enrollmentno}-${current_user_name}-${request_time}")
+      .set({
+    "Doc":"${current_user_enrollmentno}-${current_user_name}-${request_time}",
+    "Title": _title,
+    "Purpose": _purpose,
+    "ID": current_user_enrollmentno,
+    "Name": current_user_name,
+    "Branch":current_user_type=="Student" ? current_user_branch:current_user_department,
+    "Class":current_user_type=="Student" ? current_user_class:"Na",
+    "Semester":current_user_type=="Student" ? current_user_semester:"Na",
+    "Request Time": request_time,
+    "Type":current_user_type,
+    "Flag":true,
+  });
+}
+
+
+RequestTab(String _lable,String _type){
+  int index=0;
+  return StreamBuilder(
+    stream: FirebaseFirestore.instance
+        .collection(_lable)
+        .where("Type" ,isEqualTo: _type)
+    //     .orderBy("Request Time", descending: false)
+        .snapshots(),
+    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      if (!snapshot.hasData) {
+        return Center(
+          // child: CircularProgressIndicator(),
+          child: Text("No Data"),
+        );
+      }
+      else{
+        index=0;
+      }
+      return ListView(
+        children: snapshot.data!.docs.map((snap) {
+          index=index+1;
+          return ListTile(
+            onTap:(){
+              bool flag=false;
+              if(current_user_type=="Admin" && _lable=="Pending Request"){
+                flag=true;
+              }
+              if(_lable=="Pending Request"){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) =>
+                        HandleRequest(handle:flag,flag1:"Student",flag2:_lable,doc: snap["Doc"],id: snap["ID"],name: snap["Name"],branch: snap["Branch"],cls: snap["Class"],semester: snap["Semester"],title: snap["Title"],purpose: snap["Purpose"],requesttime: snap["Request Time"],type: snap["Type"],flag: snap["Flag"],feedback: "Na",approvedby: "Na",rejectedby: "Na",approvedtime:"Na",rejectedtime: "Na",),
+                    ));
+              }
+              else if(_lable=="Approved Request"){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) =>
+                        HandleRequest(handle:flag,flag1:"Student",flag2:_lable,doc: snap["Doc"],id: snap["ID"],name: snap["Name"],branch: snap["Branch"],cls: snap["Class"],semester: snap["Semester"],title: snap["Title"],purpose: snap["Purpose"],requesttime: snap["Request Time"],type: snap["Type"],flag: snap["Flag"],feedback: "Na",approvedby: snap["Approved By"],rejectedby: "Na",approvedtime:snap["Approved Time"].toString(),rejectedtime: "Na",),
+                    ));
+              }
+              else if(_lable=="Rejected Request"){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) =>
+                        HandleRequest(handle:flag,flag1:"Student",flag2:_lable,doc: snap["Doc"],id: snap["ID"],name: snap["Name"],branch: snap["Branch"],cls: snap["Class"],semester: snap["Semester"],title: snap["Title"],purpose: snap["Purpose"],requesttime: snap["Request Time"],type: snap["Type"],flag: snap["Flag"],feedback: "Na",approvedby: "Na",rejectedby: snap["Rejected By"],approvedtime:"Na",rejectedtime: snap["Rejected Time"].toString(),),
+                    ));
+              }
+            },
+            leading: Text(index.toString()),
+            title: current_user_type=="Admin" ? Text("${snap["ID"]}"):Text(snap["Title"].toString()),
+            subtitle: current_user_type=="Admin" ? Text(snap["Title"].toString()):Text(snap["Purpose"],maxLines: 1,),
+            // trailing: Icon(Icons.circle,color: Colors.green,size: 10,),
+          );
+        }).toList(),
+      );
+    },
+  );
 }

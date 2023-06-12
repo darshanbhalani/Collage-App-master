@@ -6,13 +6,13 @@ publish_to:
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.5 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 
 dependencies:
   flutter:
     sdk: flutter
-  rive: ^0.10.3
+#  rive: ^0.10.3
 
 
   cupertino_icons: ^1.0.2
@@ -39,7 +39,7 @@ dependencies:
   flutter_linkify: ^5.0.2
   font_awesome_flutter: ^10.3.0
   path: ^1.6.4
-  flutter_file_manager: ^0.2.0
+#  flutter_file_manager: ^0.2.0
   url_launcher: ^6.1.10
 #  table_calendar: ^3.0.9
 #  photofilters: ^3.0.1
@@ -49,7 +49,9 @@ dependencies:
   file_picker: ^5.2.6
   open_filex: ^4.3.2
   google_fonts: ^4.0.3
-
+  jitsi_meet_wrapper: ^0.0.6
+  flutter_svg: ^2.0.6
+#  jitsi_meet:
 
 
 dev_dependencies:

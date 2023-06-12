@@ -4,9 +4,11 @@ import 'package:myapp2/app/util/Drawer/AdminPanel/Add-UpdateClass.dart';
 import 'package:myapp2/app/util/Drawer/AdminPanel/Add-UpdateEvent.dart';
 import 'package:myapp2/app/util/Drawer/AdminPanel/Add-UpdateStudent.dart';
 import 'package:myapp2/app/util/Drawer/AdminPanel/Add-UpdateTeacher.dart';
-import 'package:myapp2/app/util/RequestPage.dart';
+import 'package:myapp2/app/util/Request/ApprovedRequest.dart';
+import 'package:myapp2/app/util/Request/RequestPage.dart';
 import '../../../../app/util/NotificationIcon.dart';
 import '../../../../app/util/PopupButton.dart';
+import '../../Request/RejectedRequest.dart';
 
 class AdminPanelPage extends StatefulWidget {
   const AdminPanelPage({Key? key}) : super(key: key);

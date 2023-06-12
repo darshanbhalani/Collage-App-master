@@ -27,7 +27,6 @@ class _MyclassHomePageState extends State<MyclassHomePage>
   @override
   void initState() {
     super.initState();
-    print(classNames);
 
     dropdownValue = (current_user_type == 'Student')
         ? current_user_class
@@ -185,7 +184,7 @@ class _MyclassHomePageState extends State<MyclassHomePage>
               // Text(dropdownValue),
               (className.isNotEmpty)
                   ? ClassChat(
-                      getKey: DateTime.now.toString(),
+                      getKey: DateTime.now().toString(),
                       className: className,
                     )
                   : Center(
@@ -220,7 +219,7 @@ class _MyclassHomePageState extends State<MyclassHomePage>
               (className.isNotEmpty)
                   ? ClassChat(
                       className: className,
-                      getKey: DateTime.now.toString(),
+                      getKey: DateTime.now().toString(),
                     )
                   : Center(
                       child: Text('Class Not Found'),
@@ -235,11 +234,9 @@ class _MyclassHomePageState extends State<MyclassHomePage>
                   : Center(
                       child: Text('Class Not Found'),
                     ),
-
               // Center(
               //   child: Text("Attendance"),
               // ),
-
               EditClass(
                 dropdownValue: dropdownValue,
               ),

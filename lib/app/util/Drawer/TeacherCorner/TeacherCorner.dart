@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp2/app/util/Drawer/StudentCorner/StudentCorner.dart';
+import 'package:myapp2/app/util/Drawer/TeacherCorner/TeacherRequestPage.dart';
 import 'package:myapp2/app/util/Functions.dart';
 
 class TeacherCorner extends StatelessWidget {
@@ -13,7 +14,7 @@ class TeacherCorner extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          ListField(context, null, "Request to Admin", RequesttoAdmin()),
+          ListField(context, null, "Request to Admin", TeacherRequestPage()),
           ListField(context, null, "Submit Report", RequesttoAdmin()),
         ],
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:myapp2/app/login/SplashScreen.dart';
-import 'app/util/Drawer/AdminPanel/AdminPanelPage.dart';
+// import 'app/util/Drawer/AdminPanel/AdminPanelPage.dart';
 import 'services/firebase_options.dart';
 
 Future main() async {

@@ -14,7 +14,7 @@ class ClassAssignment extends StatefulWidget {
   final String className;
   final String getKey;
   const ClassAssignment(
-      {super.key, required this.className, required this.getKey});
+      {required this.className, required this.getKey});
 
   @override
   ClassAssignmentState createState() => ClassAssignmentState();

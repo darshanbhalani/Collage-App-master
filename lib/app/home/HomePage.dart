@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp2/app/home/screens/HomeScreen.dart';
 import 'package:myapp2/app/home/screens/LiveClassPage.dart';
 import 'package:myapp2/app/home/screens/MyClassHomePage.dart';
+import 'package:myapp2/app/home/screens/StartNewSession.dart';
 import 'package:myapp2/app/home/screens/UserProfilePage.dart';
 import '../../app/util/Functions.dart';
 import '../../app/util/VariablesFile.dart';
@@ -39,7 +40,8 @@ class _HomePageState extends State<HomePage> {
     MyclassHomePage(
       classNames: classNames,
     ),
-    LiveClassPage(),
+    // LiveClassPage(),
+    Meeting(),
     UserProfilePage(),
     // AdminPanelPage(),
   ];

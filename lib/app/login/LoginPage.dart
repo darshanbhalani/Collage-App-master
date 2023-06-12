@@ -378,9 +378,9 @@ class _LogInState extends State<LogIn> {
                     child: TextButton(
                       onPressed: () async {
                         if (_key.currentState!.validate()) {
-                          await logIn().whenComplete(() {
+                          await Login().whenComplete(() {
                             if (FirebaseAuth.instance.currentUser != null) {
-                              current_user_enrollmentno = email.text.trim();
+                              current_user_enrollmentno = email.text.trim().toUpperCase();
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
@@ -428,8 +428,7 @@ class _LogInState extends State<LogIn> {
   Future getEmail(String collection, String id) async {
     Loading(context);
     try {
-      var a =
-      await FirebaseFirestore.instance.collection(collection).doc(id).get();
+      var a = await FirebaseFirestore.instance.collection(collection).doc(id).get();
       if (a.exists) {
         await FirebaseFirestore.instance
             .collection(collection)
@@ -440,31 +439,36 @@ class _LogInState extends State<LogIn> {
           await LogIn();
         });
       } else {
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         Navigator.pop(context);
         setState(() {
           errorString = "Oops! User not found";
         });
       }
     } on FirebaseException catch (error) {
+      print("BBBBBBBBBBBBBBBBBBBBB");
       Navigator.pop(context);
     }
   }
 
   Future logIn() async {
+    print(current_user_email);
+    print("GGGGGGGGGGGGGGGGGGGGG");
     try {
       await getEmail(current_user_type, email.text.trim().toUpperCase())
           .whenComplete(() async {
         try {
           await FirebaseAuth.instance.signInWithEmailAndPassword(
-              email: current_user_email ?? '', password: password.text.trim());
+              email: current_user_email , password: password.text.trim());
         } on FirebaseException catch (e) {
+          print("MMMMMMMMMMMMMMMMMMMMMMMMMMM");
           Navigator.pop(context);
-
           errorString = e.message;
           setState(() {});
         }
       });
     } on FirebaseException catch (e) {
+      print("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV");
       Navigator.pop(context);
 
       errorString = e.message;
@@ -472,5 +476,45 @@ class _LogInState extends State<LogIn> {
     }
     // Navigator.pop(context);
 
+  }
+
+
+  Future Login() async {
+    Loading(context);
+    print("----------------------------------------------------------");
+    print(current_user_type);
+    print(email.text.trim().toUpperCase());
+    print(password.text);
+
+    var a = await FirebaseFirestore.instance.collection(current_user_type).doc(email.text.trim().toUpperCase()).get();
+    print(a.exists);
+    print("----------------------------------------------------------");
+    if (a.exists) {
+      print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+      await FirebaseFirestore.instance
+          .collection(current_user_type)
+          .doc(email.text.trim().toUpperCase())
+          .get()
+          .then((value) async {
+        current_user_email = value["Email Id"];
+      }).whenComplete(() async {
+        try {
+          print("bbbbbbbbbbbbbbbbbbbbbb");
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: current_user_email , password: password.text.trim());
+        } on FirebaseException catch (e) {
+          print("ccccccccccccccccccccccc");
+          Navigator.pop(context);
+          errorString = "Oops! Unvalid ID or Password";
+          setState(() {});
+        }
+      });
+
+    }else{
+      Navigator.pop(context);
+      setState(() {
+        errorString = "Oops! Unvalid ID or Password";
+      });
+    }
   }
 }

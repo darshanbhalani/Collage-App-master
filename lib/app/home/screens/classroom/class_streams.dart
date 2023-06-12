@@ -9,7 +9,7 @@ import 'package:myapp2/app/util/VariablesFile.dart';
 class ClassStream extends StatefulWidget {
   final String className;
   final String getKey;
-  const ClassStream({super.key, required this.className, required this.getKey});
+  const ClassStream({required this.className, required this.getKey});
 
   @override
   State<ClassStream> createState() => _ClassStreamState();
