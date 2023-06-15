@@ -80,31 +80,28 @@ class _MyclassHomePageState extends State<MyclassHomePage>
         // ),
         title: (current_user_type == 'Student')
             ? Text(current_user_class)
-            : Flexible(
-                child: DropdownButton<String>(
-                  value: dropdownValue,
-                  iconSize: 24,
+            : DropdownButton<String>(
+              value: dropdownValue,
+              iconSize: 24,
 
-                  elevation: 16,
-                  underline: Container(
-                    height: 2,
-                  ),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropdownValue = newValue!;
-                    });
-                  },
-                  items:
-                      classNames.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value,style: TextStyle(fontSize: 18),),
-                    );
-                  }).toList(),
-                ),
+              elevation: 16,
+              underline: Container(
+                height: 2,
               ),
+              onChanged: (String? newValue) {
+                setState(() {
+                  dropdownValue = newValue!;
+                });
+              },
+              items:
+                  classNames.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value,style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w900),),
+                );
+              }).toList(),
+            ),
         actions: [
-          NotificationIcon(),
           PopupButton(),
         ],
         bottom: TabBar(

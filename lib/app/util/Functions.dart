@@ -651,7 +651,7 @@ Future signUp(context, _email) async {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
           email: _email.trim(),
-          password: getPassword(),
+          password: getRandomString(),
         )
         .whenComplete(() => passwordReset(context, _email));
   } on FirebaseException catch (e) {
@@ -659,11 +659,11 @@ Future signUp(context, _email) async {
   }
 }
 
-String getPassword() {
+String getRandomString() {
   final RandomPasswordGenerator randomPassword = RandomPasswordGenerator();
   String newPassword = randomPassword.randomPassword(
-    passwordLength: 6,
-    specialChar: true,
+    passwordLength: 10,
+    specialChar: false,
     letters: true,
     numbers: true,
     uppercase: false,

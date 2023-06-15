@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp2/app/util/About.dart';
 import 'package:myapp2/app/util/Licence.dart';
+import 'package:myapp2/app/util/ThemeData.dart';
 import 'package:myapp2/app/util/VariablesFile.dart';
 import '../../../../app/util/PopupButton.dart';
 import 'package:myapp2/app/util/Functions.dart';
@@ -76,11 +77,11 @@ class _SettingsState extends State<Settings> {
             ),
             InkWell(
               onTap: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => Theme(),
-                //     ));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Theme(),
+                    ));
               },
               child: ListTile(
                 leading: Icon(
@@ -337,6 +338,8 @@ class _StorageState extends State<Storage> {
   }
 }
 
+ThemeManager _themeManager =ThemeManager();
+
 class Theme extends StatefulWidget {
   const Theme({Key? key}) : super(key: key);
 
@@ -363,30 +366,30 @@ class _ThemeState extends State<Theme> {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
           child: ListView(
             children: [
-              ListTile(
-                title: Text("Default Theme"),
-                trailing: Switch.adaptive(
-                  value: _defaultTheme,
-                  onChanged: (value) => setState(() {
-                    _defaultTheme = value;
-                  }),
-                ),
-              ),
+              // ListTile(
+              //   title: Text("Default Theme"),
+              //   trailing: Switch.adaptive(
+              //     value: _defaultTheme,
+              //     onChanged: (value) => setState(() {
+              //       _defaultTheme = value;
+              //     }),
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Text("Note : Default Theme use system theme."),
               ),
               Divider(),
               ListTile(
-                enabled: _defaultTheme,
+                // enabled: _defaultTheme,
                 title: Text("Dark Theme"),
-                trailing: Switch.adaptive(
-                  value: _darkTheme,
-                  onChanged: _defaultTheme!
-                      ? (value) => setState(() {
-                            _darkTheme = value;
-                          })
-                      : null,
+                trailing: Switch(
+                  value: _themeManager.themeMode == ThemeMode.dark,
+                  onChanged: (newValue){
+                    setState(() {
+                      _themeManager.toggleTheme(newValue);
+                    });
+                  }
                 ),
               ),
             ],

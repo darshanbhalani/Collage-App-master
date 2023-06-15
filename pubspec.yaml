@@ -50,8 +50,9 @@ dependencies:
   open_filex: ^4.3.2
   google_fonts: ^4.0.3
   jitsi_meet_wrapper: ^0.0.6
-  flutter_svg: ^2.0.6
-#  jitsi_meet:
+  plugin_platform_interface: ^2.0.2
+  flutter_plugin_android_lifecycle: ^2.0.15
+
 
 
 dev_dependencies:
