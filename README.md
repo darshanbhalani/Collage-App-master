@@ -25,4 +25,4 @@ samples, guidance on mobile development, and a full API reference.
 ![Screenshot_2023-07-01-16-06-37-89_69dbd793de4129444adba5f3ac4214a3](https://github.com/darshanbhalani/Collage-App-master/assets/108427824/a226d38b-cf0a-40d3-8437-b1467da071cd)
 ![Screenshot_2023-07-01-16-06-40-96_69dbd793de4129444adba5f3ac4214a3](https://github.com/darshanbhalani/Collage-App-master/assets/108427824/1d5e4ed5-eee0-4660-a605-5e8a02191cf8)
 ![Screenshot_2023-07-01-16-06-51-56_69dbd793de4129444adba5f3ac4214a3](https://github.com/darshanbhalani/Collage-App-master/assets/108427824/27e75ece-8d38-458c-b659-e8509552f2b7)
-![Screenshot_2023-07-01-16-07-05-05_69dbd793de4129444adba5f3ac4214a3](https://github.com/darshanbhalani/Collage-App-master/assets/108427824/243335c8-1712-4750-a190-2fe226a45633)
+
