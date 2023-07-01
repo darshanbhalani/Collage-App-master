@@ -14,6 +14,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+![Screenshot_2023-07-01-16-07-05-05_69dbd793de4129444adba5f3ac4214a3](https://github.com/darshanbhalani/Collage-App-master/assets/108427824/243335c8-1712-4750-a190-2fe226a45633)
 ![Screenshot_2023-07-01-16-07-08-81_69dbd793de4129444adba5f3ac4214a3](https://github.com/darshanbhalani/Collage-App-master/assets/108427824/50d52e0c-274a-43fd-9176-fbcb7fdd9aed)
 ![Screenshot_2023-07-01-16-07-13-17_69dbd793de4129444adba5f3ac4214a3](https://github.com/darshanbhalani/Collage-App-master/assets/108427824/5d2fa585-7bfb-43fc-86b1-813d2c18492b)
 ![Screenshot_2023-07-01-16-07-17-25_69dbd793de4129444adba5f3ac4214a3](https://github.com/darshanbhalani/Collage-App-master/assets/108427824/971e0471-cddd-4610-9249-a60900f07adb)
