@@ -1,4 +1,4 @@
-# myapp2
+# Collage-App
 
 A new Flutter project.
 
