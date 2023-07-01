@@ -177,8 +177,7 @@ class _CreateNewAssignmentState extends State<CreateNewAssignment> {
           },
           child: Text(
             points,
-            style: TextStyle(
-                decoration: TextDecoration.underline),
+            style: TextStyle(decoration: TextDecoration.underline),
           ),
         )
       ],
@@ -440,13 +439,13 @@ class _CreateNewAssignmentState extends State<CreateNewAssignment> {
     await FirebaseDatabase.instance
         .ref()
         .child(
-            'users/${current_user_enrollmentno}/assignments/${widget.className}/${title.text}/$timeStamp')
+            'users/${cuId}/assignments/${widget.className}/${title.text}/$timeStamp')
         .set({'key': pushKey}).then((value) async {
       await firebaseDbRef.child('${widget.className}/$pushKey').set({
         'senderId': this.user!.uid,
         'type': 'Assignment',
-        'senderName': current_user_first_name + ' ' + current_user_last_name,
-        'senderPhotoUrl': current_user_photo,
+        'senderName': cuFirstName + ' ' + cuLastName,
+        'senderPhotoUrl': cuPhoto,
         'title': title.text,
         'description': description.text,
         'time': now!.format('D, M j, H:i'),

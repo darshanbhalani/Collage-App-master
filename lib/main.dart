@@ -1,9 +1,12 @@
+import 'dart:async';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:myapp2/Connection/CheckInternet.dart';
 import 'package:myapp2/app/login/SplashScreen.dart';
-import 'package:myapp2/app/util/Colors.dart';
+import 'package:myapp2/app/util/Functions.dart';
 import 'package:myapp2/app/util/ThemeData.dart';
-// import 'app/util/Drawer/AdminPanel/AdminPanelPage.dart';
 import 'services/firebase_options.dart';
 
 Future main() async {
@@ -11,10 +14,9 @@ Future main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   runApp(const AppHome());
 }
-
-ThemeManager _themeManager =ThemeManager();
 
 class AppHome extends StatefulWidget {
   const AppHome({Key? key}) : super(key: key);
@@ -24,33 +26,15 @@ class AppHome extends StatefulWidget {
 }
 
 class _AppHomeState extends State<AppHome> {
-
-  @override
-  void initState(){
-    _themeManager.addListener((themeListener));
-    setState(() {
-
-    });
-    super.initState();
-  }
-
-  themeListener(){
-    if(mounted){
-      setState(() {
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "VSITR",
+    DependancyInjection.init();
+
+    return GetMaterialApp(
+      title: "LDRP-ITR",
       theme: lightTheme,
-      // darkTheme: darkTheme,
-      // themeMode: _themeManager.themeMode,
       debugShowCheckedModeBanner: false,
       home: const SplashScreen(),
-      //home: const AdminPanelPage(),
     );
   }
 }

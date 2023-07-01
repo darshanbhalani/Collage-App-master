@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-class PopupButton extends StatelessWidget {
+class PopupButton extends StatefulWidget {
   const PopupButton({Key? key}) : super(key: key);
 
+  @override
+  State<PopupButton> createState() => _PopupButtonState();
+}
+
+class _PopupButtonState extends State<PopupButton> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
@@ -11,14 +16,9 @@ class PopupButton extends StatelessWidget {
           return [
             PopupMenuItem(
               child: const Text('Refresh'),
-              onTap: () {},
-            ),
-            PopupMenuItem(
-              child: const Text('Scanner'),
-            ),
-            PopupMenuItem(
-              child: const Text('Report'),
-              onTap: () {},
+              onTap: () {
+                setState(() {});
+              },
             ),
           ];
         }));

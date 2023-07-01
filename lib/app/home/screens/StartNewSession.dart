@@ -217,9 +217,6 @@ class _MeetingState extends State<Meeting> {
 
 
 class JitsiMeetWrapper {
-  /// Joins a meeting based on the JitsiMeetingOptions passed in.
-  /// A JitsiMeetingListener can be attached to this meeting that will automatically
-  /// be removed when the meeting has ended
   static Future<JitsiMeetingResponse> joinMeeting({
     required JitsiMeetingOptions options,
     JitsiMeetingListener? listener,

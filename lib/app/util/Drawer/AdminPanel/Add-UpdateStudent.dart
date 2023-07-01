@@ -4,9 +4,8 @@ import 'package:date_time_format/date_time_format.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp2/app/util/Drawer/AdminPanel/UploadViaFile.dart';
 import 'package:myapp2/app/util/Functions.dart';
-import '../../../../app/util/NotificationIcon.dart';
-import '../../../../app/util/PopupButton.dart';
 import '../../../../app/util/VariablesFile.dart';
 
 class AddNewStudent extends StatefulWidget {
@@ -83,8 +82,28 @@ class _AddNewStudentState extends State<AddNewStudent> {
         appBar: AppBar(
           title: Text("Add New Student"),
           actions: [
-            NotificationIcon(),
-            PopupButton(),
+            PopupMenuButton(
+                position: PopupMenuPosition.under,
+                itemBuilder: ((context) {
+                  return [
+                    PopupMenuItem(
+                      child: const Text('Refresh'),
+                      onTap: () {
+                        setState(() {});
+                      },
+                    ),
+                    PopupMenuItem(
+                      child: const Text('Upload via File'),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UploadViaFile(),
+                            ));
+                      },
+                    ),
+                  ];
+                })),
           ],
         ),
         body: SingleChildScrollView(
@@ -153,9 +172,9 @@ class _AddNewStudentState extends State<AddNewStudent> {
                   "https://firebasestorage.googleapis.com/v0/b/flutter-classroom-48dd1.appspot.com/o/images%2Fdefault%2Fprofile.png?alt=media&token=91a6a65f-2732-4256-861f-e9642a0f2cd7",
               "Show Profile": _showprofile,
               "ID": _id.text.toString().toUpperCase(),
-              "First Name": _first_name.text,
-              "Middle Name": _middle_name.text,
-              "Last Name": _last_name.text,
+              "First Name": _first_name.text.toUpperCase(),
+              "Middle Name": _middle_name.text.toUpperCase(),
+              "Last Name": _last_name.text.toUpperCase(),
               "Email Id": _email.text,
               "Phone No": _phoneno.text,
               "Joining Year": _joining_year.text,
@@ -298,10 +317,7 @@ class _UpdateStudentDetailsState extends State<UpdateStudentDetails> {
         title: flag1
             ? Text("Search Student")
             : Text("Student : ${_id.text.toString().toUpperCase()}"),
-        actions: [
-          NotificationIcon(),
-          PopupButton(),
-        ],
+
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),

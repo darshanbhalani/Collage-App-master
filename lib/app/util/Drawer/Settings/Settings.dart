@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp2/app/util/About.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:myapp2/app/util/Licence.dart';
-import 'package:myapp2/app/util/ThemeData.dart';
 import 'package:myapp2/app/util/VariablesFile.dart';
 import '../../../../app/util/PopupButton.dart';
 import 'package:myapp2/app/util/Functions.dart';
+
+import '../../About.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -38,7 +39,7 @@ class _SettingsState extends State<Settings> {
               },
               child: ListTile(
                 leading: Icon(
-                  Icons.abc,
+                  Icons.person,
                 ),
                 title: Text("Account & Info"),
                 trailing: Icon(Icons.chevron_right),
@@ -77,11 +78,6 @@ class _SettingsState extends State<Settings> {
             ),
             InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Theme(),
-                    ));
               },
               child: ListTile(
                 leading: Icon(
@@ -93,11 +89,11 @@ class _SettingsState extends State<Settings> {
             ),
             InkWell(
               onTap: () {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //       builder: (context) => About(),
-                //     ));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => About(),
+                    ));
               },
               child: ListTile(
                 leading: Icon(
@@ -122,6 +118,27 @@ class _SettingsState extends State<Settings> {
                 title: Text("License and Agreement"),
                 trailing: Icon(Icons.chevron_right),
               ),
+            ),
+            InkWell(
+              onTap: () async {
+                final Email email = Email(
+                  body: '',
+                  subject: 'LDRP-ITR Collage App REPORT by User ( ${cuId}-${cuName} )',
+                  recipients: ['darshanbhalanipatel@gmail.com'],
+                  // cc: ['cc@example.com'],
+                  // bcc: ['bcc@example.com'],
+                  // attachmentPaths: ['/path/to/attachment.zip'],
+                  isHTML: false,
+                );
+                await FlutterEmailSender.send(email);
+
+              },
+              child: ListTile(
+                  leading: Icon(
+                    Icons.report_problem,
+                  ),
+                  title: Text("Report"),
+                  trailing: Icon(Icons.chevron_right)),
             ),
           ],
         ),
@@ -338,65 +355,7 @@ class _StorageState extends State<Storage> {
   }
 }
 
-ThemeManager _themeManager =ThemeManager();
 
-class Theme extends StatefulWidget {
-  const Theme({Key? key}) : super(key: key);
-
-  @override
-  State<Theme> createState() => _ThemeState();
-}
-
-class _ThemeState extends State<Theme> {
-  late bool _defaultTheme = true;
-  late bool _darkTheme = false;
-  late bool requestnotification = true;
-  late bool classroomnotification = true;
-  late bool broadcastnotification = true;
-  late bool liveclassnotification = true;
-  String dropdownValue = 'Default';
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Theme"),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-          child: ListView(
-            children: [
-              // ListTile(
-              //   title: Text("Default Theme"),
-              //   trailing: Switch.adaptive(
-              //     value: _defaultTheme,
-              //     onChanged: (value) => setState(() {
-              //       _defaultTheme = value;
-              //     }),
-              //   ),
-              // ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Text("Note : Default Theme use system theme."),
-              ),
-              Divider(),
-              ListTile(
-                // enabled: _defaultTheme,
-                title: Text("Dark Theme"),
-                trailing: Switch(
-                  value: _themeManager.themeMode == ThemeMode.dark,
-                  onChanged: (newValue){
-                    setState(() {
-                      _themeManager.toggleTheme(newValue);
-                    });
-                  }
-                ),
-              ),
-            ],
-          ),
-        ));
-  }
-}
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({Key? key}) : super(key: key);
@@ -639,8 +598,8 @@ class _ProfileVisiblityState extends State<ProfileVisiblity> {
   Check(context) async {
     // Loading(context);
     await FirebaseFirestore.instance
-        .collection(current_user_type)
-        .doc(current_user_enrollmentno)
+        .collection(cuType)
+        .doc(cuId)
         .get()
         .then((value) {
       setState(() {
@@ -652,10 +611,7 @@ class _ProfileVisiblityState extends State<ProfileVisiblity> {
   }
 
   set() async {
-    await FirebaseFirestore.instance
-        .collection(current_user_type)
-        .doc(current_user_enrollmentno)
-        .update({
+    await FirebaseFirestore.instance.collection(cuType).doc(cuId).update({
       "Show Profile": _flag2,
     });
     Navigator.pop(context);

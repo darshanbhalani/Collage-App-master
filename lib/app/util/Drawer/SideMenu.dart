@@ -1,3 +1,4 @@
+import 'package:myapp2/app/util/Drawer/Students/Students.dart';
 import 'package:myapp2/app/util/Functions.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp2/app/util/Drawer/Courses/Courses.dart';
@@ -32,34 +33,40 @@ class SideMenu extends StatelessWidget {
               children: [
                 UserAccountsDrawerHeader(
                   currentAccountPictureSize: const Size.square(80),
-                  accountName: Text(current_user_name),
-                  accountEmail: Text(current_user_email),
+                  accountName: Text(
+                    cuName,
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                  accountEmail: Text(
+                    cuEmail,
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
                   currentAccountPicture: CircleAvatar(
                     radius: 50,
-                    backgroundImage: NetworkImage(current_user_photo),
+                    backgroundImage: NetworkImage(cuPhoto),
                     // backgroundImage: Image.file(file as File) as ImageProvider,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.black,
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/bimg.jpg'),
-                      fit: BoxFit.cover,
-                    ),
+                    color:Color.fromARGB(100, 120, 120, 120),
                   ),
                 ),
                 Positioned(
                     right: 2,
                     bottom: 8,
                     child: Text(
-                      current_user_type,
-                      style: TextStyle(color: Colors.white),
-                    ))
+                      cuType,
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    )),
               ],
             ),
           ),
           // Box(context, "Calender", Icons.calendar_month, CalenderPage(), true),
           Box(context, "Course", Icons.list_alt, CoursesPage(), true),
           Box(context, "Faculties", Icons.people_outline, Faculties(), true),
+          Box(context, "Students", Icons.people_outline, Students(), true),
           //Box(context, "Downloads", Icons.download_for_offline_outlined, DownloadPage(), true),
           ListTile(
             leading: Icon(Icons.download_for_offline_outlined),
@@ -77,11 +84,11 @@ class SideMenu extends StatelessWidget {
             },
           ),
           Box(context, "Admin Panel", Icons.admin_panel_settings_outlined,
-              AdminPanelPage(), current_user_type == "Admin"),
+              AdminPanelPage(), cuType == "Admin"),
           Box(context, "Student Corner", Icons.account_box_outlined,
-              StudentCorner(), current_user_type == "Student"),
+              StudentCorner(), cuType == "Student"),
           Box(context, "Teacher Corner", Icons.account_box_outlined,
-              TeacherCorner(), current_user_type == "Teacher"),
+              TeacherCorner(), cuType == "Teacher"),
           Box(context, "Settings", Icons.settings_outlined, Settings(), true),
           InkWell(
             onTap: () {

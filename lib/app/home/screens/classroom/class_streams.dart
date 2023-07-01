@@ -26,7 +26,6 @@ class _ClassStreamState extends State<ClassStream> {
   @override
   void initState() {
     super.initState();
-    final now = DateTime.now();
     this.firebaseMsgDbRef =
         FirebaseDatabase.instance.ref().child('Stream/Classes');
 
@@ -89,13 +88,14 @@ class _ClassStreamState extends State<ClassStream> {
     final msgText = json['text'] as String? ?? '??';
     final time = json['time'] as String? ?? '!!';
     final senderPhotoUrl = json['senderPhotoUrl'] as String? ?? '';
+    final senderType = json['senderType'] as String? ?? '??';
     final messageUI = Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: Colors.grey,
+            color: senderType == "Admin" ? Colors.red : Colors.grey,
           ),
         ),
         child: Column(
@@ -117,11 +117,14 @@ class _ClassStreamState extends State<ClassStream> {
                       senderName,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        color:
+                            senderType == "Admin" ? Colors.red : Colors.black,
                       ),
                     ),
                     Text(
                       time,
                       style: Theme.of(context).textTheme.caption,
+
                     )
                   ],
                 ),
@@ -152,10 +155,11 @@ class _ClassStreamState extends State<ClassStream> {
 
   Widget buildStreamMsgRow() {
     return Visibility(
-      visible: current_user_type == 'Teacher',
+      visible: cuType == 'Teacher',
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 6.0),
-        decoration: BoxDecoration(color: Theme.of(context).cardColor,
+        decoration: BoxDecoration(
+            color: Theme.of(context).cardColor,
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(10)),
         child: Row(
@@ -169,7 +173,8 @@ class _ClassStreamState extends State<ClassStream> {
                   maxLines: null,
                   maxLength: null,
                   decoration: const InputDecoration(
-                      hintText: "Write stream message", border: InputBorder.none),
+                      hintText: "Write stream message",
+                      border: InputBorder.none),
                   controller: textController,
                   onChanged: (String text) =>
                       setState(() => isComposing = text.isNotEmpty),
@@ -190,16 +195,15 @@ class _ClassStreamState extends State<ClassStream> {
   }
 
   Future<void> onStreamMsgSubmitted(String text) async {
-    // Clear input text field.
     textController.clear();
     setState(() {
       isComposing = false;
     });
-    // Send message to firebase realtime database.
     firebaseMsgDbRef.child(widget.className).push().set({
+      'senderType': cuType,
       'senderId': this.user!.uid,
-      'senderName': current_user_first_name + ' ' + current_user_last_name,
-      'senderPhotoUrl': current_user_photo,
+      'senderName': cuFirstName + ' ' + cuLastName,
+      'senderPhotoUrl': cuPhoto,
       'text': text,
       'time': postTime.format('D, M j, H:i'),
     });

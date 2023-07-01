@@ -11,16 +11,15 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
-      // backgroundColor: Color.fromARGB(200, 12, 3, 42),
       splash: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            height: MediaQuery.of(context).size.height*0.5,
-              width: MediaQuery.of(context).size.width*0.5,
-              child: Image.asset('assets/images/vsitr-logo.jpg')
-          ),],
+              height: MediaQuery.of(context).size.height * 0.5,
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: Image.asset('assets/images/icon.png')),
+        ],
       ),
       nextScreen: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),

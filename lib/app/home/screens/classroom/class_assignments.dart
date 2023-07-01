@@ -13,8 +13,7 @@ import 'Assignments/show_assignment.dart';
 class ClassAssignment extends StatefulWidget {
   final String className;
   final String getKey;
-  const ClassAssignment(
-      {required this.className, required this.getKey});
+  const ClassAssignment({required this.className, required this.getKey});
 
   @override
   ClassAssignmentState createState() => ClassAssignmentState();
@@ -40,8 +39,7 @@ class ClassAssignmentState extends State<ClassAssignment> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: Visibility(
-          visible: current_user_type == 'Teacher',
-          child: createAssignmentButton(context)),
+          visible: cuType == 'Teacher', child: createAssignmentButton(context)),
       body: Center(
         child: Column(
           children: <Widget>[
@@ -196,7 +194,7 @@ class ClassAssignmentState extends State<ClassAssignment> {
 
               dirFiles = await saveDirFiles(
                 files: dirFiles,
-                path: 'uploads/${current_user_enrollmentno}/$assignmentTitle',
+                path: 'uploads/${cuId}/$assignmentTitle',
               ).whenComplete(() {
                 isDir = true;
                 setState(() {});
@@ -205,7 +203,7 @@ class ClassAssignmentState extends State<ClassAssignment> {
               studentAssignment = await getStudentAssignment(
                 widget.className,
                 assignmentTitle,
-                current_user_enrollmentno,
+                cuId,
               ).whenComplete(() {
                 isBase = true;
                 setState(() {});

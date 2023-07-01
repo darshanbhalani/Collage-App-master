@@ -20,7 +20,6 @@ class ClassChatState extends State<ClassChat> {
 
   final TextEditingController _textController = TextEditingController();
   bool _isComposing = false;
-  List names = ['Uttam', 'Darshan', 'Bhargav', 'Darshil'];
 
   @override
   void initState() {
@@ -35,13 +34,8 @@ class ClassChatState extends State<ClassChat> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            _buildMessagesList(),
-            _buildComposeMsgRow()
-          ],
-        ),
+      body: Column(
+        children: <Widget>[_buildMessagesList(), _buildComposeMsgRow()],
       ),
     );
   }
@@ -85,13 +79,17 @@ class ClassChatState extends State<ClassChat> {
       return Container();
     }
     final json = val as Map;
+    final senderId = json['senderId'] as String? ?? '!!';
     final senderName = json['senderName'] as String? ?? '?? <unknown>';
     final msgText = json['text'] as String? ?? '??';
     final userType = json['userType'] as String? ?? '!!';
     final senderPhotoUrl = json['senderPhotoUrl'] as String?;
     final messageUI = Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      padding: EdgeInsets.symmetric(vertical: 10.0),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        // mainAxisAlignment: senderName == "${cuFirstName} ${cuLastName}" ? MainAxisAlignment.end:MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
@@ -132,15 +130,11 @@ class ClassChatState extends State<ClassChat> {
   // Builds the row for composing and sending message.
   Widget _buildComposeMsgRow() {
     return Container(
-
-      margin: const EdgeInsets.symmetric(horizontal: 6.0),
-
+      margin: const EdgeInsets.only(left: 6, right: 6, bottom: 5),
       decoration: BoxDecoration(
-
-        color: Theme.of(context).cardColor,
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(10)
-      ),
+          color: Colors.transparent,
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(10)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
@@ -173,20 +167,17 @@ class ClassChatState extends State<ClassChat> {
 
   // Triggered when text is submitted (send button pressed).
   Future<void> _onTextMsgSubmitted(String text) async {
-    // Clear input text field.
     _textController.clear();
     setState(() {
       _isComposing = false;
     });
-    // Send message to firebase realtime database.
     String? newRefKey = await _firebaseMsgDbRef.push().key;
     _firebaseMsgDbRef.push().set({
-      'senderId': this._user!.uid,
-      'senderName': current_user_first_name + ' ' + current_user_last_name,
-      'senderPhotoUrl': current_user_photo,
+      'senderId': cuId,
+      'senderName': cuFirstName + ' ' + cuLastName,
+      'senderPhotoUrl': cuPhoto,
       'text': text,
-      'userType': current_user_type,
-      'list': names
+      'userType': cuType,
     });
   }
 }

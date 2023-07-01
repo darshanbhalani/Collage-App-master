@@ -118,7 +118,7 @@ class _ShowAssignmentState extends State<ShowAssignment> {
 
   Visibility bottomUploadButton() {
     return Visibility(
-      visible: current_user_type == 'Student',
+      visible: cuType == 'Student',
       //child: bottomSheetUpload(),
       child: InkWell(
         onTap: () {
@@ -197,21 +197,20 @@ class _ShowAssignmentState extends State<ShowAssignment> {
                         fileNames: uploadedFileNames,
                         fileExt: uploadedFileExt,
                         firebasePath:
-                            'Assignments/${widget.className}/${widget.title}/${current_user_enrollmentno}')
+                            'Assignments/${widget.className}/${widget.title}/${cuId}')
                     .whenComplete(() async {
                   await generateLinks(
                           fileLinks: uploadedFileLinks,
                           fileNames: uploadedFileNames,
                           firebasePath:
-                              'Assignments/${widget.className}/${widget.title}/${current_user_enrollmentno}')
+                              'Assignments/${widget.className}/${widget.title}/${cuId}')
                       .then((value) async {
                     await setPrimaryData();
                   }).then((value) async {
                     await saveUploadedFiles(
                         fileNames: uploadedFileNames,
                         files: uploadedFiles,
-                        path:
-                            'uploads/${current_user_enrollmentno}/${widget.title}');
+                        path: 'uploads/${cuId}/${widget.title}');
                   });
                   isUploaded = true;
                   setState(() {});
@@ -290,13 +289,10 @@ class _ShowAssignmentState extends State<ShowAssignment> {
               ? await openFile(
                   uploadedFileNames[index], '', uploadedFiles, index)
               : (dirFileNames.isNotEmpty)
-                  ? await openFile(
-                      dirFileNames[index],
-                      'uploads/${current_user_enrollmentno}/${widget.title}',
-                      [],
-                      0)
+                  ? await openFile(dirFileNames[index],
+                      'uploads/${cuId}/${widget.title}', [], 0)
                   : await downloadFile(studentFileNames[index], index,
-                      'uploads/${current_user_enrollmentno}/${widget.title}');
+                      'uploads/${cuId}/${widget.title}');
         },
         leading: Icon(Icons.picture_as_pdf),
         title: Text(
@@ -385,14 +381,13 @@ class _ShowAssignmentState extends State<ShowAssignment> {
     print(uploadedFileLinks);
 
     await firebaseDbRef
-        .child(
-            'Students/${widget.className}/${widget.title}/${current_user_enrollmentno}')
+        .child('Students/${widget.className}/${widget.title}/${cuId}')
         .set({
       'senderId': this.user!.uid,
       'type': 'Assignment',
-      'enrollment': current_user_enrollmentno,
-      'senderName': current_user_first_name + ' ' + current_user_last_name,
-      'senderPhotoUrl': current_user_photo,
+      'enrollment': cuId,
+      'senderName': cuFirstName + ' ' + cuLastName,
+      'senderPhotoUrl': cuPhoto,
       'title': widget.title,
       'description': widget.description,
       'time': now!.format('D, M j, H:i'),

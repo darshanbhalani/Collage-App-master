@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp2/app/util/Functions.dart';
-
 import '../VariablesFile.dart';
 
 class HandleRequest extends StatefulWidget {
@@ -25,16 +24,33 @@ class HandleRequest extends StatefulWidget {
   final String rejectedtime;
   final String approvedtime;
 
-    const HandleRequest({required this.handle,required this.flag1,required this.flag2,required this.doc,required this.id,required this.name,required this.branch,required this.semester,required this.cls,required this.title,required this.purpose,required this.requesttime,required this.type,required this.flag,required this.feedback,required this.approvedby,required this.rejectedby,required this.approvedtime,required this.rejectedtime
-  });
+  const HandleRequest(
+      {required this.handle,
+      required this.flag1,
+      required this.flag2,
+      required this.doc,
+      required this.id,
+      required this.name,
+      required this.branch,
+      required this.semester,
+      required this.cls,
+      required this.title,
+      required this.purpose,
+      required this.requesttime,
+      required this.type,
+      required this.flag,
+      required this.feedback,
+      required this.approvedby,
+      required this.rejectedby,
+      required this.approvedtime,
+      required this.rejectedtime});
 
   @override
   State<HandleRequest> createState() => _HandleRequestState();
 }
 
 class _HandleRequestState extends State<HandleRequest> {
-
-  TextEditingController _feedback =TextEditingController();
+  TextEditingController _feedback = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,25 +58,26 @@ class _HandleRequestState extends State<HandleRequest> {
         title: Text(widget.doc),
       ),
       body: Padding(
-        padding:const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: ListView(
           children: [
             ShowField("ID", widget.id, false),
             ShowField("Name", widget.name, false),
             ShowField("Branch", widget.branch, false),
             Visibility(
-                visible: widget.flag2=="Approved",
+                visible: widget.flag2 == "Approved",
                 child: Column(
                   children: [
                     ShowField("Semester", widget.semester, false),
                     ShowField("Class", widget.cls, false),
-                 ],
+                  ],
                 )),
             ShowField("Title", widget.title, false),
             ShowField("Purpose", widget.purpose, false),
-            ShowField("Request Time", widget.requesttime.toDate().toString(), false),
+            ShowField(
+                "Request Time", widget.requesttime.toDate().toString(), false),
             Visibility(
-              visible: widget.flag2=="Approved Request",
+                visible: widget.flag2 == "Approved Request",
                 child: Column(
                   children: [
                     ShowField("Approved by", widget.approvedby, false),
@@ -68,7 +85,7 @@ class _HandleRequestState extends State<HandleRequest> {
                   ],
                 )),
             Visibility(
-                visible: widget.flag2=="Rejected Request",
+                visible: widget.flag2 == "Rejected Request",
                 child: Column(
                   children: [
                     ShowField("Rejected by", widget.rejectedby, false),
@@ -98,15 +115,17 @@ class _HandleRequestState extends State<HandleRequest> {
                   ),
                   child: Center(
                       child: Text(
-                        "Reject",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-                      )),
+                    "Reject",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  )),
                 ),
               ),
               InkWell(
                 onTap: () async {
-                    await RightBTN();
+                  await RightBTN();
                 },
                 child: Container(
                   height: 50,
@@ -117,10 +136,12 @@ class _HandleRequestState extends State<HandleRequest> {
                   ),
                   child: Center(
                       child: Text(
-                        "Approve",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-                      )),
+                    "Approve",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  )),
                 ),
               ),
             ],
@@ -138,14 +159,14 @@ class _HandleRequestState extends State<HandleRequest> {
     Box(context, "Approve");
   }
 
-  Box(context,String _lable){
+  Box(context, String _lable) {
     final _formkey = GlobalKey<FormState>();
     return showDialog(
         context: context,
-        builder: (context){
+        builder: (context) {
           return Center(
             child: AlertDialog(
-              title:  Row(
+              title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -154,8 +175,7 @@ class _HandleRequestState extends State<HandleRequest> {
                   )
                 ],
               ),
-              content:
-              Form(
+              content: Form(
                 key: _formkey,
                 child: TextFormField(
                   obscureText: false,
@@ -173,13 +193,13 @@ class _HandleRequestState extends State<HandleRequest> {
                     ),
                     border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Colors.teal,
-                        )),
+                      color: Colors.teal,
+                    )),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Theme.of(context).primaryColor,
-                          width: 2,
-                        )),
+                      color: Theme.of(context).primaryColor,
+                      width: 2,
+                    )),
                     enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
                     ),
@@ -198,7 +218,7 @@ class _HandleRequestState extends State<HandleRequest> {
                     },
                     child: Text("No")),
                 TextButton(
-                    onPressed: () async{
+                    onPressed: () async {
                       if (_formkey.currentState!.validate()) {
                         Process("Approved");
                       }
@@ -214,25 +234,29 @@ class _HandleRequestState extends State<HandleRequest> {
     Loading(context);
     var request_time = DateTime.now();
     await FirebaseFirestore.instance
-        .collection("${_lable} Request").doc(widget.doc)
+        .collection("${_lable} Request")
+        .doc(widget.doc)
         .set({
-      "Doc":widget.doc,
+      "Doc": widget.doc,
       "Title": widget.title,
       "Purpose": widget.purpose,
       "ID": widget.id,
       "Name": widget.name,
-      "Branch":widget.branch,
-      "Class":widget.cls,
-      "Semester":widget.semester,
+      "Branch": widget.branch,
+      "Class": widget.cls,
+      "Semester": widget.semester,
       "Request Time": widget.requesttime,
-      "${_lable} Time":request_time,
-      "Type":widget.type,
-      "Flag":true,
-      "Feedback":_feedback.text,
-      "${_lable} By":current_user_name,
+      "${_lable} Time": request_time,
+      "Type": widget.type,
+      "Flag": true,
+      "Feedback": _feedback.text,
+      "${_lable} By": cuName,
     }).whenComplete(() async {
       await FirebaseFirestore.instance
-        .collection("Pending Request").doc(widget.doc).delete().whenComplete(() {
+          .collection("Pending Request")
+          .doc(widget.doc)
+          .delete()
+          .whenComplete(() {
         Navigator.pop(context);
         Navigator.pop(context);
         Navigator.pop(context);

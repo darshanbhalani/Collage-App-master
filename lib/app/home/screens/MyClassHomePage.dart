@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp2/app/home/screens/classroom/People.dart';
 import 'package:myapp2/app/util/Drawer/SideMenu.dart';
-import '../../../app/util/NotificationIcon.dart';
 import '../../../app/util/PopupButton.dart';
 import '../../../app/util/VariablesFile.dart';
 import '../../../app/home/screens/classroom/class_assignments.dart';
@@ -28,15 +27,15 @@ class _MyclassHomePageState extends State<MyclassHomePage>
   void initState() {
     super.initState();
 
-    dropdownValue = (current_user_type == 'Student')
-        ? current_user_class
+    dropdownValue = (cuType == 'Student')
+        ? cuClass
         : (classNames.isNotEmpty)
             ? classNames[0]
             : '';
     print(dropdownValue);
 
-    Tabcontroller = TabController(
-        length: (current_user_type == 'Student') ? 4 : 5, vsync: this);
+    Tabcontroller =
+        TabController(length: (cuType == 'Student') ? 4 : 5, vsync: this);
     controller.addListener(() {
       setState(() {});
     });
@@ -53,54 +52,33 @@ class _MyclassHomePageState extends State<MyclassHomePage>
     return Scaffold(
       drawer: SideMenu(),
       appBar: AppBar(
-        // backgroundColor: Color(hexcolor("303952")),
-        // title:DropDownTextField(
-        //   textStyle: TextStyle(color: Colors.white,fontSize: 22),
-        //   controller: _selectedclass,
-        //   dropDownItemCount: Courses.length,
-        //   dropDownList: Courses,
-        //   clearOption: false,
-        //   textFieldDecoration: InputDecoration(
-        //     focusedBorder: OutlineInputBorder(
-        //       borderSide: BorderSide(
-        //         color: Colors.transparent,
-        //       ),
-        //     ),
-        //     errorBorder:  OutlineInputBorder(
-        //       borderSide: BorderSide(
-        //         color: Colors.transparent
-        //       ),
-        //     ),
-        //     enabledBorder: OutlineInputBorder(
-        //       borderSide: BorderSide(
-        //         color: Colors.transparent
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        title: (current_user_type == 'Student')
-            ? Text(current_user_class)
+        title: (cuType == 'Student')
+            ? Text(cuClass)
             : DropdownButton<String>(
-              value: dropdownValue,
-              iconSize: 24,
-
-              elevation: 16,
-              underline: Container(
-                height: 2,
+                value: dropdownValue,
+                iconSize: 24,
+                elevation: 16,
+                underline: Container(
+                  height: 2,
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue = newValue!;
+                  });
+                },
+                items: classNames.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w900),
+                    ),
+                  );
+                }).toList(),
               ),
-              onChanged: (String? newValue) {
-                setState(() {
-                  dropdownValue = newValue!;
-                });
-              },
-              items:
-                  classNames.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value,style: TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w900),),
-                );
-              }).toList(),
-            ),
         actions: [
           PopupButton(),
         ],
@@ -110,7 +88,7 @@ class _MyclassHomePageState extends State<MyclassHomePage>
           controller: Tabcontroller,
           // unselectedLabelColor: Colors.blueGrey,
           labelColor: Colors.white,
-          tabs: (current_user_type == 'Student')
+          tabs: (cuType == 'Student')
               ? [
                   Tab(
                     text: "Stream",
@@ -128,10 +106,6 @@ class _MyclassHomePageState extends State<MyclassHomePage>
                     text: "Classwork",
                     icon: Icon(Icons.event_note_outlined),
                   ),
-                  // Tab(
-                  //   text: "Attendance",
-                  //   icon: Icon(Icons.analytics_outlined),
-                  // ),
                 ]
               : [
                   Tab(
@@ -150,10 +124,6 @@ class _MyclassHomePageState extends State<MyclassHomePage>
                     text: "Classwork",
                     icon: Icon(Icons.event_note_outlined),
                   ),
-                  // Tab(
-                  //   text: "Attendance",
-                  //   icon: Icon(Icons.analytics_outlined),
-                  // ),
                   Tab(
                     text: "Details",
                     icon: Icon(Icons.edit),
@@ -168,7 +138,7 @@ class _MyclassHomePageState extends State<MyclassHomePage>
   TabBarView tabBody(String className) {
     return TabBarView(
       controller: Tabcontroller,
-      children: (current_user_type == 'Student')
+      children: (cuType == 'Student')
           ? [
               (className.isNotEmpty)
                   ? ClassStream(
@@ -188,9 +158,11 @@ class _MyclassHomePageState extends State<MyclassHomePage>
                       child: Text('Class Not Found'),
                     ),
 
-        People(dropdownValue: dropdownValue,),
+              People(
+                dropdownValue: dropdownValue,
+              ),
 
-        (className.isNotEmpty)
+              (className.isNotEmpty)
                   ? ClassAssignment(
                       className: className,
                       getKey: DateTime.now().toString(),
@@ -198,10 +170,6 @@ class _MyclassHomePageState extends State<MyclassHomePage>
                   : Center(
                       child: Text('Class Not Found'),
                     ),
-
-              // Center(
-              //   child: Text("Attendance"),
-              // ),
             ]
           : [
               (className.isNotEmpty)
@@ -222,7 +190,9 @@ class _MyclassHomePageState extends State<MyclassHomePage>
                       child: Text('Class Not Found'),
                     ),
 
-               People(dropdownValue: dropdownValue,),
+              People(
+                dropdownValue: dropdownValue,
+              ),
               (className.isNotEmpty)
                   ? ClassAssignment(
                       className: className,
@@ -231,9 +201,6 @@ class _MyclassHomePageState extends State<MyclassHomePage>
                   : Center(
                       child: Text('Class Not Found'),
                     ),
-              // Center(
-              //   child: Text("Attendance"),
-              // ),
               EditClass(
                 dropdownValue: dropdownValue,
               ),

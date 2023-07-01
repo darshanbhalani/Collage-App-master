@@ -19,6 +19,10 @@ class Licence extends StatelessWidget {
             leading: Text("Release Date :",style: TextStyle(fontSize:18,fontWeight: FontWeight.bold),),
             title: Text("01/01/2023"),
           ),
+          ListTile(
+            leading: Text("Developer :",style: TextStyle(fontSize:18,fontWeight: FontWeight.bold),),
+            title: Text("Darshan Bhalani"),
+          ),
         ],
       ),
     );

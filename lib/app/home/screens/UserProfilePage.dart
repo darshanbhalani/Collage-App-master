@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:myapp2/app/util/Colors.dart';
 import 'package:myapp2/app/util/Functions.dart';
 import '../../../app/util/NotificationIcon.dart';
 import '../../../app/util/PopupButton.dart';
@@ -50,7 +49,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 width: 300,
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
-                                        image: NetworkImage(current_user_photo),
+                                        image: NetworkImage(cuPhoto),
                                         fit: BoxFit.cover)),
                               ),
                             );
@@ -60,7 +59,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         radius: 80,
                         backgroundImage: _imagefile != null
                             ? FileImage(File(_imagefile!.path)) as ImageProvider
-                            : NetworkImage(current_user_photo)),
+                            : NetworkImage(cuPhoto)),
                   ),
                   Positioned(
                     bottom: 5,
@@ -126,33 +125,33 @@ class _UserProfilePageState extends State<UserProfilePage> {
             SizedBox(
               height: 20,
             ),
-            ShowField("$current_user_type ID.", current_user_enrollmentno,false),
-            ShowField("Name", current_user_name,false),
-            ShowField("Birth Date", current_user_birthdate,false),
-            ShowField("Blood Group", current_user_bloodgroup,false),
-            ShowField("Joining Year", current_user_joining_date,false),
+            ShowField("$cuType ID.", cuId, false),
+            ShowField("Name", cuName, false),
+            ShowField("Birth Date", cuBirthDate, false),
+            ShowField("Blood Group", cuBloodGroup, false),
+            ShowField("Joining Year", cuJoiningYear, false),
             Visibility(
-              visible: current_user_type == "Student",
+              visible: cuType == "Student",
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ShowField("Branch", current_user_branch,false),
-                    ShowField("Class", current_user_class,false),
-                    ShowField("Semester", current_user_semester,false),
-                    ShowField("Validity", current_user_validity,false),
+                    ShowField("Branch", cuBranch, false),
+                    ShowField("Class", cuClass, false),
+                    ShowField("Semester", cuSemester, false),
+                    ShowField("Validity", cuValidity, false),
                   ]),
             ),
             Visibility(
-              visible: current_user_type == "Teacher",
+              visible: cuType == "Teacher",
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ShowField("Department", current_user_department,false),
+                  ShowField("Department", cuDeparttment, false),
                 ],
               ),
             ),
-            ShowField("Phone No.", current_user_phoneno,false),
-            ShowField("Email", current_user_email,false),
+            ShowField("Phone No.", cuPhoneNo, false),
+            ShowField("Email", cuEmail, false),
             SizedBox(
               height: 10,
             ),
@@ -215,22 +214,22 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   Future<void> _uploadImageToFirebaseStorage(pickedfile) async {
     final _file = File(pickedfile!.path!);
-    final storageRef = FirebaseStorage.instance.ref().child(
-        'images/$current_user_type/profiles/${current_user_first_name}_${current_user_last_name}');
+    final storageRef = FirebaseStorage.instance
+        .ref()
+        .child('images/$cuType/profiles/${cuFirstName}_${cuLastName}');
     if (pickedfile != null) {
       storageRef.putFile(_file).whenComplete(() async {
         final imgUrl = await FirebaseStorage.instance
             .ref()
-            .child(
-                'images/${current_user_type}/profiles/${current_user_first_name}_${current_user_last_name}')
+            .child('images/${cuType}/profiles/${cuFirstName}_${cuLastName}')
             .getDownloadURL();
         await FirebaseFirestore.instance
-            .collection(current_user_type)
-            .doc(current_user_enrollmentno)
+            .collection(cuType)
+            .doc(cuId)
             .update({"Photo": imgUrl}).whenComplete(() async {
-          current_user_photo = imgUrl;
+          cuPhoto = imgUrl;
           // SharedPreferences sp = await SharedPreferences.getInstance();
-          // sp.setString("current_user_photo", current_user_photo);
+          // sp.setString("cuPhoto", cuPhoto);
           setState(() {
             _imagefile = pickedfile;
           });

@@ -22,31 +22,11 @@ MaterialColor buildMaterialColor(Color color) {
 const COLOR_PRIMARY=Color.fromARGB(1,107, 103, 103);
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
-  primaryColor: Colors.green,
+  primaryColor: Colors.black,
   primarySwatch: buildMaterialColor(Color(0xFF1E1E1E)),
-  scaffoldBackgroundColor: buildMaterialColor(Color(0xFFE4E4E4)),
+  scaffoldBackgroundColor: Colors.white,
   drawerTheme: DrawerThemeData(
     backgroundColor:buildMaterialColor(Color(0xFFE4E4E4)),
   )
-
 );
 
-// ThemeData darkTheme = ThemeData(
-//     // brightness: Brightness.dark,
-//   primarySwatch: buildMaterialColor(Color(0xFF3399FF)),
-//   primaryColor: Colors.green
-// );
-
-
-class ThemeManager with ChangeNotifier{
-  ThemeMode _themeMode =ThemeMode.light;
-
-  get themeMode => _themeMode;
-
-  toggleTheme(bool isDark){
-    _themeMode = isDark?ThemeMode.dark:ThemeMode.light;
-    print(_themeMode);
-    print("_________________________________________");
-    notifyListeners();
-  }
-}

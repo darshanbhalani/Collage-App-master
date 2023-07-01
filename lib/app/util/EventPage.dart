@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../app/util/VariablesFile.dart';
 
 class EventPage extends StatefulWidget {
-  const EventPage({Key? key}) : super(key: key);
+  final String title;
+  final String coverPhoto;
+  final String about;
+  final String link;
+  final String coordinator;
+  final String dueDate;
+
+  const EventPage(
+      {Key? key,
+      required this.title,
+      required this.coverPhoto,
+      required this.about,
+      required this.link,
+      required this.coordinator,
+      required this.dueDate})
+      : super(key: key);
 
   @override
   State<EventPage> createState() => _EventPageState();
@@ -12,22 +26,34 @@ class EventPage extends StatefulWidget {
 class _EventPageState extends State<EventPage> {
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    print(width);
+    bool isMobile = false;
+    bool isDesktop = false;
+    if(width<=800){
+      setState(() {
+        isMobile = true;
+      });
+    }
+    else {
+      setState(() {
+        isDesktop = true;
+      });
+    }
     return Scaffold(
       appBar: AppBar(
-        title: Text(clicked_event_title),
+        title: Text(widget.title),
       ),
-      // drawer: SideMenu(),
-      body: ListView(
+      body: !isDesktop ? ListView(
         children: [
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Container(
-              height: 220,
+              height: isMobile ? 220:width/2,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: NetworkImage(clicked_event_coverphoto!),
-                    fit: BoxFit.cover),
-                color: Colors.lightBlueAccent[100],
+                    image: NetworkImage(widget.coverPhoto), fit: BoxFit.cover),
+                color: Colors.white54,
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
@@ -40,24 +66,22 @@ class _EventPageState extends State<EventPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Last Date of Registration :- " +
-                    clicked_event_duedate.toString().substring(0, 10)),
+                    widget.dueDate.toString().substring(0, 10)),
                 SizedBox(height: 5),
-                Text("Coordinator :- " + clicked_event_coordinator),
+                Text("Coordinator :- " + widget.coordinator),
                 Divider(),
                 Text(
-                  "          " + clicked_event_about,
+                  "          " + widget.about,
                   style: (TextStyle(fontSize: 16)),
                 ),
                 SizedBox(height: 20),
                 Visibility(
-                  visible:
-                      clicked_event_link != null && clicked_event_link != "",
+                  visible: widget.link != null && widget.link != "",
                   child: Center(
                     child: ElevatedButton(
                         onPressed: () async {
-                          final Uri _url = Uri.parse(clicked_event_link!);
+                          final Uri _url = Uri.parse(widget.link!);
                           await _launchUrl(_url);
-                          print(clicked_event_link);
                         },
                         child: Text("Register Now..")),
                   ),
@@ -66,7 +90,62 @@ class _EventPageState extends State<EventPage> {
             )),
           )
         ],
-      ),
+      ):
+      Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Container(
+            height: isMobile ? MediaQuery.of(context).size.width:MediaQuery.of(context).size.width/2,
+            width: isMobile ? MediaQuery.of(context).size.width:MediaQuery.of(context).size.width/2,
+            // height: 220,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: NetworkImage(widget.coverPhoto!), fit: BoxFit.fill),
+              color: Colors.white54,
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+        // SizedBox(width: 10),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Last Date of Registration :- " +
+                          widget.dueDate.toString().substring(0, 10)),
+                      SizedBox(height: 5),
+                      Text("Coordinator :- " + widget.coordinator),
+                      Divider(),
+                      Text(
+                        "          " + widget.about,
+                        style: (TextStyle(fontSize: 16)),
+                      ),
+                      SizedBox(height: 20),
+                      Visibility(
+                        visible: widget.link != null && widget.link != "",
+                        child: Center(
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                final Uri _url = Uri.parse(widget.link!);
+                                await _launchUrl(_url);
+                              },
+                              child: Text("Register Now..")),
+                        ),
+                      ),
+                    ],
+                  )),
+            ),
+          ),
+        ),
+      ],
+    ),
     );
   }
 

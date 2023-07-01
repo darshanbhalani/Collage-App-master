@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'PopupButton.dart';
-
 class About extends StatelessWidget {
   About({Key? key}) : super(key: key);
+
+  final Uri _web = Uri.parse('https://www.ldrp.ac.in');
   final Uri _youtube = Uri.parse('https://youtube.com/@ldrp-itr578');
   final Uri _facebook =
       Uri.parse('https://www.facebook.com/ldrpitr?mibextid=ZbWKwL');
@@ -22,7 +22,12 @@ class About extends StatelessWidget {
       appBar: AppBar(
         title: Text("About LDRP-ITR"),
         actions: [
-          PopupButton(),
+          IconButton(
+              onPressed: () async {
+                await _launchUrl(_web);
+              },
+              icon: Icon(Icons.link)
+          ),
         ],
       ),
       body: Padding(

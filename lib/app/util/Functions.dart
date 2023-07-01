@@ -1,16 +1,18 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp2/app/util/Request/HandleRequest.dart';
 import 'package:random_password_generator/random_password_generator.dart';
-// import 'package:rive/rive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 import '../Login/LoginChoisePage.dart';
 import 'VariablesFile.dart';
+
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  print(message.notification!.title);
+}
 
 Future getDetails(String collection, String id) async {
   await FirebaseFirestore.instance
@@ -18,106 +20,104 @@ Future getDetails(String collection, String id) async {
       .doc(id)
       .get()
       .then((value) {
-    current_user_photo = value["Photo"];
-    current_user_first_name = value["First Name"];
-    current_user_middle_name = value["Middle Name"];
-    current_user_last_name = value["Last Name"];
-    current_user_birthdate = value["Birth Date"];
-    current_user_bloodgroup = value["Blood Group"];
-    current_user_joining_date = value["Joining Year"];
-    current_user_phoneno = value["Phone No"];
-    current_user_email = value["Email Id"];
+    cuPhoto = value["Photo"];
+    cuFirstName = value["First Name"];
+    cuMiddleName = value["Middle Name"];
+    cuLastName = value["Last Name"];
+    cuBirthDate = value["Birth Date"];
+    cuBloodGroup = value["Blood Group"];
+    cuJoiningYear = value["Joining Year"];
+    cuPhoneNo = value["Phone No"];
+    cuEmail = value["Email Id"];
 
-    if (current_user_type == "Student") {
-      current_user_branch = value["Branch"];
-      current_user_class = value["Class"];
-      current_user_semester = value["Semester"];
-      current_user_validity = value["Validity"];
-    } else if (current_user_type == "Teacher") {
-      current_user_department = value["Department"];
+    if (cuType == "Student") {
+      cuBranch = value["Branch"];
+      cuClass = value["Class"];
+      cuSemester = value["Semester"];
+      cuValidity = value["Validity"];
+    } else if (cuType == "Teacher") {
+      cuDeparttment = value["Department"];
     }
   });
-  current_user_name =
-      "${current_user_first_name} ${current_user_middle_name} ${current_user_last_name}";
-
+  cuName = "${cuFirstName} ${cuMiddleName} ${cuLastName}";
 }
 
 Future setDetails() async {
   SharedPreferences sp = await SharedPreferences.getInstance();
-  sp.setString("current_user_enrollmentno", current_user_enrollmentno);
-  sp.setString("current_user_type", current_user_type);
-sp.setString("current_user_photo", current_user_photo);
-sp.setString("current_user_first_name", current_user_first_name);
-sp.setString("current_user_middle_name", current_user_middle_name);
-sp.setString("current_user_last_name", current_user_last_name);
-sp.setString("current_user_name", current_user_name);
-sp.setString("current_user_birthdate", current_user_birthdate);
-sp.setString("current_user_bloodgroup", current_user_bloodgroup);
-sp.setString("current_user_joining_date", current_user_joining_date);
-sp.setString("current_user_email", current_user_email);
-sp.setString("current_user_phoneno", current_user_phoneno);
-if(current_user_type=="Student"){
-  sp.setString("current_user_branch", current_user_branch);
-  sp.setString("current_user_class", current_user_class);
-  sp.setString("current_user_semester", current_user_semester);
-  sp.setString("current_user_validity", current_user_validity);
-}
-if(current_user_type=="Teacher"){
-  sp.setString("current_user_department", current_user_department);
-}
+  sp.setString("cuId", cuId);
+  sp.setString("cuType", cuType);
+  sp.setString("cuPhoto", cuPhoto);
+  sp.setString("cuFirstName", cuFirstName);
+  sp.setString("cuMiddleName", cuMiddleName);
+  sp.setString("cuLastName", cuLastName);
+  sp.setString("cuName", cuName);
+  sp.setString("cuBirthDate", cuBirthDate);
+  sp.setString("cuBloodGroup", cuBloodGroup);
+  sp.setString("cuJoiningYear", cuJoiningYear);
+  sp.setString("cuEmail", cuEmail);
+  sp.setString("cuPhoneNo", cuPhoneNo);
+  if (cuType == "Student") {
+    sp.setString("cuBranch", cuBranch);
+    sp.setString("cuClass", cuClass);
+    sp.setString("cuSemester", cuSemester);
+    sp.setString("cuValidity", cuValidity);
+  }
+  if (cuType == "Teacher") {
+    sp.setString("cuDeparttment", cuDeparttment);
+  }
 }
 
-Future getLocalDetails() async{
+Future getLocalDetails() async {
   SharedPreferences sp = await SharedPreferences.getInstance();
-  current_user_type=sp.getString("current_user_type")??current_user_type;
-  current_user_enrollmentno= sp.getString("current_user_enrollmentno")??current_user_enrollmentno;
+  cuType = sp.getString("cuType") ?? cuType;
+  cuId = sp.getString("cuId") ?? cuId;
 
-current_user_photo=sp.getString("current_user_photo")??current_user_photo;
-current_user_first_name=sp.getString("current_user_first_name")??current_user_first_name;
-current_user_middle_name=sp.getString("current_user_middle_name")??current_user_middle_name;
-current_user_last_name=sp.getString("current_user_last_name")??current_user_last_name;
-current_user_name=sp.getString("current_user_name")??current_user_name;
-current_user_birthdate=sp.getString("current_user_birthdate")??current_user_birthdate;
-current_user_class=sp.getString("current_user_bloodgroup")??current_user_bloodgroup;
-current_user_class=sp.getString("current_user_joining_date")??current_user_joining_date;
-current_user_email =sp.getString("current_user_email")??current_user_email;
-current_user_phoneno=sp.getString("current_user_phoneno")??current_user_phoneno;
-if(current_user_type=="Student"){
-  current_user_branch=sp.getString("current_user_branch")??current_user_branch;
-current_user_class=sp.getString("current_user_class")??current_user_class;
-current_user_class=sp.getString("current_user_semester")??current_user_semester;
-current_user_department=sp.getString("current_user_validity")??current_user_validity;
-}
-if(current_user_type=="Teacher") {
-  current_user_department =
-      sp.getString("current_user_department") ?? current_user_department;
-}
+  cuPhoto = sp.getString("cuPhoto") ?? cuPhoto;
+  cuFirstName = sp.getString("cuFirstName") ?? cuFirstName;
+  cuMiddleName = sp.getString("cuMiddleName") ?? cuMiddleName;
+  cuLastName = sp.getString("cuLastName") ?? cuLastName;
+  cuName = sp.getString("cuName") ?? cuName;
+  cuBirthDate = sp.getString("cuBirthDate") ?? cuBirthDate;
+  cuClass = sp.getString("cuBloodGroup") ?? cuBloodGroup;
+  cuClass = sp.getString("cuJoiningYear") ?? cuJoiningYear;
+  cuEmail = sp.getString("cuEmail") ?? cuEmail;
+  cuPhoneNo = sp.getString("cuPhoneNo") ?? cuPhoneNo;
+  if (cuType == "Student") {
+    cuBranch = sp.getString("cuBranch") ?? cuBranch;
+    cuClass = sp.getString("cuClass") ?? cuClass;
+    cuClass = sp.getString("cuSemester") ?? cuSemester;
+    cuDeparttment = sp.getString("cuValidity") ?? cuValidity;
+  }
+  if (cuType == "Teacher") {
+    cuDeparttment = sp.getString("cuDeparttment") ?? cuDeparttment;
+  }
 }
 
-Future removeLocalDetails() async{
+Future removeLocalDetails() async {
   SharedPreferences sp = await SharedPreferences.getInstance();
-  await sp.remove("current_user_enrollmentno");
-  await sp.remove("current_user_type");
-await sp.remove("current_user_photo");
-await sp.remove("current_user_first_name");
-await sp.remove("current_user_middle_name");
-await sp.remove("current_user_last_name");
-await sp.remove("current_user_name");
-await sp.remove("current_user_birthdate");
-await sp.remove("current_user_bloodgroup");
-await sp.remove("current_user_joining_date");
-await sp.remove("current_user_email");
-await sp.remove("current_user_phoneno");
-await sp.remove("current_user_class");
-await sp.remove("current_user_branch");
-await sp.remove("current_user_semester");
-await sp.remove("current_user_validity");
-await sp.remove("current_user_department");
+  await sp.remove("cuId");
+  await sp.remove("cuType");
+  await sp.remove("cuPhoto");
+  await sp.remove("cuFirstName");
+  await sp.remove("cuMiddleName");
+  await sp.remove("cuLastName");
+  await sp.remove("cuName");
+  await sp.remove("cuBirthDate");
+  await sp.remove("cuBloodGroup");
+  await sp.remove("cuJoiningYear");
+  await sp.remove("cuEmail");
+  await sp.remove("cuPhoneNo");
+  await sp.remove("cuClass");
+  await sp.remove("cuBranch");
+  await sp.remove("cuSemester");
+  await sp.remove("cuValidity");
+  await sp.remove("cuDeparttment");
 }
 
 TFormField(context, String _lable, TextEditingController _controller,
     bool _condition, bool _flag) {
   return Column(
+    mainAxisSize: MainAxisSize.min,
     children: [
       TextFormField(
         obscureText: _flag,
@@ -253,7 +253,7 @@ ButtonField(
   );
 }
 
-ShowField(String _lable, String _value,bool _flag) {
+ShowField(String _lable, String _value, bool _flag) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -289,57 +289,60 @@ ShowField(String _lable, String _value,bool _flag) {
 }
 
 BottomSheetButtons(context, _formkey, Function _nextfunction) {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 20),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        InkWell(
-          onTap: () async {
-            Navigator.pop(context);
-          },
-          child: Container(
-            height: 50,
-            width: 150,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Theme.of(context).primaryColor,
+  return Container(
+    color: Colors.white,
+    child: Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          InkWell(
+            onTap: () async {
+              Navigator.pop(context);
+            },
+            child: Container(
+              height: 50,
+              width: 150,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Theme.of(context).primaryColor,
+              ),
+              child: Center(
+                  child: Text(
+                "Cancle",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              )),
             ),
-            child: Center(
-                child: Text(
-              "Cancle",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            )),
           ),
-        ),
-        InkWell(
-          onTap: () async {
-            final FormState? form = _formkey.currentState;
-            if (form!.validate()) {
-              _nextfunction();
-            }
-          },
-          child: Container(
-            height: 50,
-            width: 150,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Theme.of(context).primaryColor,
+          InkWell(
+            onTap: () async {
+              final FormState? form = _formkey.currentState;
+              if (form!.validate()) {
+                _nextfunction();
+              }
+            },
+            child: Container(
+              height: 50,
+              width: 150,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Theme.of(context).primaryColor,
+              ),
+              child: Center(
+                  child: Text(
+                "Next",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              )),
             ),
-            child: Center(
-                child: Text(
-              "Next",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            )),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }
@@ -396,7 +399,7 @@ Change_Password(context, String _currentpassword, String _newpassword1,
   if (_newpassword1 == _newpassword2 && _currentpassword != _newpassword1) {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: current_user_email, password: _currentpassword);
+          email: cuEmail, password: _currentpassword);
       await FirebaseAuth.instance.currentUser!
           .updatePassword(_newpassword1)
           .then((_) {
@@ -445,19 +448,16 @@ Change_Email(context, String _currentpassword, String _newemail1,
       builder: (context) {
         return Center(child: CircularProgressIndicator());
       });
-  if (_newemail1 == _newemail2 && current_user_email != _newemail1) {
+  if (_newemail1 == _newemail2 && cuEmail != _newemail1) {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: current_user_email, password: _currentpassword);
+          email: cuEmail, password: _currentpassword);
       await FirebaseAuth.instance.currentUser!
           .updateEmail(_newemail1)
           .then((_) async {
-        current_user_email = _newemail1;
+        cuEmail = _newemail1;
         // SharedPreferences sp = await SharedPreferences.getInstance();
-        await FirebaseFirestore.instance
-            .collection(current_user_type)
-            .doc(current_user_enrollmentno)
-            .update({
+        await FirebaseFirestore.instance.collection(cuType).doc(cuId).update({
           "Email Id": _newemail1,
         }).onError((error, _) {
           Navigator.pop(context);
@@ -465,7 +465,7 @@ Change_Email(context, String _currentpassword, String _newemail1,
             SnackBar(content: Text('Error : $error')),
           );
         });
-        // sp.setString("current_user_email", current_user_email);
+        // sp.setString("cuEmail", cuEmail);
         Navigator.pop(context);
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -492,8 +492,7 @@ Change_Email(context, String _currentpassword, String _newemail1,
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Oops! Email do not match")),
     );
-  } else if (current_user_email == _newemail1 ||
-      current_user_email == _newemail2) {
+  } else if (cuEmail == _newemail1 || cuEmail == _newemail2) {
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -509,14 +508,11 @@ Change_Phoneno(context, String _currentpassword, String _newphone1,
       builder: (context) {
         return Center(child: CircularProgressIndicator());
       });
-  if (_newphone1 == _newphone2 && current_user_phoneno != _newphone1) {
+  if (_newphone1 == _newphone2 && cuPhoneNo != _newphone1) {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: current_user_email, password: _currentpassword);
-      await FirebaseFirestore.instance
-          .collection(current_user_type)
-          .doc(current_user_enrollmentno)
-          .update({
+          email: cuEmail, password: _currentpassword);
+      await FirebaseFirestore.instance.collection(cuType).doc(cuId).update({
         "Phone No": _newphone1,
       }).onError((error, _) {
         Navigator.pop(context);
@@ -524,9 +520,9 @@ Change_Phoneno(context, String _currentpassword, String _newphone1,
           SnackBar(content: Text('Error : $error')),
         );
       });
-      current_user_phoneno = _newphone1;
+      cuPhoneNo = _newphone1;
       // SharedPreferences sp = await SharedPreferences.getInstance();
-      // sp.setString("current_user_phoneno", current_user_phoneno);
+      // sp.setString("cuPhoneNo", cuPhoneNo);
       Navigator.pop(context);
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
@@ -545,8 +541,7 @@ Change_Phoneno(context, String _currentpassword, String _newphone1,
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text("Oops! Phone Number do not match")),
     );
-  } else if (current_user_phoneno == _newphone1 ||
-      current_user_phoneno == _newphone2) {
+  } else if (cuPhoneNo == _newphone1 || cuPhoneNo == _newphone2) {
     Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -596,8 +591,7 @@ logout(context) {
                           MaterialPageRoute(
                               builder: (context) => LoginChoisePage()));
                     });
-                    });
-
+                  });
                 },
                 child: Text("Yes")),
           ],
@@ -607,15 +601,10 @@ logout(context) {
 
 Loading(context) {
   return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
-        return Container(
-            child: Center(
-                // child: RiveAnimation.asset("assets/images/loading.riv"),
-                child: CircularProgressIndicator(color: Colors.purpleAccent)
-            ));
-
-        return Center(child: CircularProgressIndicator(color: Colors.purpleAccent));
+        return Container(child: Center(child: CircularProgressIndicator()));
       });
 }
 
@@ -792,33 +781,37 @@ DeleteAccountPopUp(context, String _lable, Function _function) {
       });
 }
 
-Future SubmitRequest(String _title,String _purpose) async {
+Future SubmitRequest(context,String _title, String _purpose) async {
+  Loading(context);
   var request_time = DateTime.now();
   await FirebaseFirestore.instance
-      .collection("Pending Request").doc("${current_user_enrollmentno}-${current_user_name}-${request_time}")
+      .collection("Pending Request")
+      .doc("${cuId}-${cuName}-${request_time}")
       .set({
-    "Doc":"${current_user_enrollmentno}-${current_user_name}-${request_time}",
+    "Doc": "${cuId}-${cuName}-${request_time}",
     "Title": _title,
     "Purpose": _purpose,
-    "ID": current_user_enrollmentno,
-    "Name": current_user_name,
-    "Branch":current_user_type=="Student" ? current_user_branch:current_user_department,
-    "Class":current_user_type=="Student" ? current_user_class:"Na",
-    "Semester":current_user_type=="Student" ? current_user_semester:"Na",
+    "ID": cuId,
+    "Name": cuName,
+    "Branch": cuType == "Student" ? cuBranch : cuDeparttment,
+    "Class": cuType == "Student" ? cuClass : "Na",
+    "Semester": cuType == "Student" ? cuSemester : "Na",
     "Request Time": request_time,
-    "Type":current_user_type,
-    "Flag":true,
+    "Type": cuType,
+    "Flag": true,
+  }).whenComplete((){
+    Navigator.pop(context);
+    Navigator.pop(context);
   });
 }
 
-
-RequestTab(String _lable,String _type){
-  int index=0;
+RequestTab(String _lable, String _type) {
+  int index = 0;
   return StreamBuilder(
     stream: FirebaseFirestore.instance
         .collection(_lable)
-        .where("Type" ,isEqualTo: _type)
-    //     .orderBy("Request Time", descending: false)
+        .where("Type", isEqualTo: _type)
+        //     .orderBy("Request Time", descending: false)
         .snapshots(),
     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
       if (!snapshot.hasData) {
@@ -826,45 +819,396 @@ RequestTab(String _lable,String _type){
           // child: CircularProgressIndicator(),
           child: Text("No Data"),
         );
-      }
-      else{
-        index=0;
+      } else {
+        index = 0;
       }
       return ListView(
         children: snapshot.data!.docs.map((snap) {
-          index=index+1;
+          index = index + 1;
           return ListTile(
-            onTap:(){
-              bool flag=false;
-              if(current_user_type=="Admin" && _lable=="Pending Request"){
-                flag=true;
+            onTap: () {
+              bool flag = false;
+              if (cuType == "Admin" && _lable == "Pending Request") {
+                flag = true;
               }
-              if(_lable=="Pending Request"){
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>
-                        HandleRequest(handle:flag,flag1:"Student",flag2:_lable,doc: snap["Doc"],id: snap["ID"],name: snap["Name"],branch: snap["Branch"],cls: snap["Class"],semester: snap["Semester"],title: snap["Title"],purpose: snap["Purpose"],requesttime: snap["Request Time"],type: snap["Type"],flag: snap["Flag"],feedback: "Na",approvedby: "Na",rejectedby: "Na",approvedtime:"Na",rejectedtime: "Na",),
+              if (_lable == "Pending Request") {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HandleRequest(
+                        handle: flag,
+                        flag1: "Student",
+                        flag2: _lable,
+                        doc: snap["Doc"],
+                        id: snap["ID"],
+                        name: snap["Name"],
+                        branch: snap["Branch"],
+                        cls: snap["Class"],
+                        semester: snap["Semester"],
+                        title: snap["Title"],
+                        purpose: snap["Purpose"],
+                        requesttime: snap["Request Time"],
+                        type: snap["Type"],
+                        flag: snap["Flag"],
+                        feedback: "Na",
+                        approvedby: "Na",
+                        rejectedby: "Na",
+                        approvedtime: "Na",
+                        rejectedtime: "Na",
+                      ),
                     ));
-              }
-              else if(_lable=="Approved Request"){
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>
-                        HandleRequest(handle:flag,flag1:"Student",flag2:_lable,doc: snap["Doc"],id: snap["ID"],name: snap["Name"],branch: snap["Branch"],cls: snap["Class"],semester: snap["Semester"],title: snap["Title"],purpose: snap["Purpose"],requesttime: snap["Request Time"],type: snap["Type"],flag: snap["Flag"],feedback: "Na",approvedby: snap["Approved By"],rejectedby: "Na",approvedtime:snap["Approved Time"].toString(),rejectedtime: "Na",),
+              } else if (_lable == "Approved Request") {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HandleRequest(
+                        handle: flag,
+                        flag1: "Student",
+                        flag2: _lable,
+                        doc: snap["Doc"],
+                        id: snap["ID"],
+                        name: snap["Name"],
+                        branch: snap["Branch"],
+                        cls: snap["Class"],
+                        semester: snap["Semester"],
+                        title: snap["Title"],
+                        purpose: snap["Purpose"],
+                        requesttime: snap["Request Time"],
+                        type: snap["Type"],
+                        flag: snap["Flag"],
+                        feedback: "Na",
+                        approvedby: snap["Approved By"],
+                        rejectedby: "Na",
+                        approvedtime: snap["Approved Time"].toString(),
+                        rejectedtime: "Na",
+                      ),
                     ));
-              }
-              else if(_lable=="Rejected Request"){
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>
-                        HandleRequest(handle:flag,flag1:"Student",flag2:_lable,doc: snap["Doc"],id: snap["ID"],name: snap["Name"],branch: snap["Branch"],cls: snap["Class"],semester: snap["Semester"],title: snap["Title"],purpose: snap["Purpose"],requesttime: snap["Request Time"],type: snap["Type"],flag: snap["Flag"],feedback: "Na",approvedby: "Na",rejectedby: snap["Rejected By"],approvedtime:"Na",rejectedtime: snap["Rejected Time"].toString(),),
+              } else if (_lable == "Rejected Request") {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HandleRequest(
+                        handle: flag,
+                        flag1: "Student",
+                        flag2: _lable,
+                        doc: snap["Doc"],
+                        id: snap["ID"],
+                        name: snap["Name"],
+                        branch: snap["Branch"],
+                        cls: snap["Class"],
+                        semester: snap["Semester"],
+                        title: snap["Title"],
+                        purpose: snap["Purpose"],
+                        requesttime: snap["Request Time"],
+                        type: snap["Type"],
+                        flag: snap["Flag"],
+                        feedback: "Na",
+                        approvedby: "Na",
+                        rejectedby: snap["Rejected By"],
+                        approvedtime: "Na",
+                        rejectedtime: snap["Rejected Time"].toString(),
+                      ),
                     ));
               }
             },
             leading: Text(index.toString()),
-            title: current_user_type=="Admin" ? Text("${snap["ID"]}"):Text(snap["Title"].toString()),
-            subtitle: current_user_type=="Admin" ? Text(snap["Title"].toString()):Text(snap["Purpose"],maxLines: 1,),
+            title: cuType == "Admin"
+                ? Text("${snap["ID"]}")
+                : Text(snap["Title"].toString()),
+            subtitle: cuType == "Admin"
+                ? Text(snap["Title"].toString())
+                : Text(
+                    snap["Purpose"],
+                    maxLines: 1,
+                  ),
             // trailing: Icon(Icons.circle,color: Colors.green,size: 10,),
           );
         }).toList(),
       );
     },
+  );
+}
+
+OnClick(
+    context,
+    String _type,
+    String _id,
+    String _name,
+    String _photo,
+    String _email,
+    String _phone,
+    String _birthdate,
+    String _bloodgroup,
+    String _joiningyear,
+    String _department,
+    String _semester,
+    String _class,
+    String _validity) {
+  return showDialog(
+      context: context,
+      builder: (context) {
+        var width = MediaQuery.of(context).size.width;
+        return Center(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.65,
+            width: width > 480 ? 450 : MediaQuery.of(context).size.width * 0.9,
+            child: Container(
+              child: Card(
+                elevation: 10,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: ListView(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundImage: NetworkImage(_photo),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            child: Flexible(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    _name,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 25),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Divider(
+                        thickness: 3,
+                      ),
+                      setData("ID", _id),
+                      setData("Email", _email),
+                      setData("Phone No", _phone),
+                      setData("Birth Date", _birthdate),
+                      setData("Blood Group", _bloodgroup),
+                      setData("Joining Year", _joiningyear),
+                      Visibility(
+                        visible: _type == "Teacher",
+                        child: setData("Department", _department),
+                      ),
+                      Visibility(
+                        visible: _type == "Student",
+                        child: Column(
+                          children: [
+                            setData("Class", _class),
+                            setData("Branch", _department),
+                            setData("Semester", _semester),
+                            setData("Validity", _validity),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      });
+}
+
+setData(_lable, _value) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+    child: Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              "${_lable} : ",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+            ),
+            Container(
+              child: Flexible(
+                child: Column(
+                  children: [
+                    Text(
+                      _value,
+                      style: TextStyle(fontSize: 17),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Divider(
+          thickness: 2,
+        ),
+      ],
+    ),
+  );
+}
+
+ListBoxInitial(String _type){
+  return Expanded(
+    child: StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection(_type)
+          .snapshots(),
+      builder: (BuildContext context,
+          AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return ListView(
+          children: snapshot.data!.docs.map((snap) {
+            return InkWell(
+                onTap: () async {
+                  if (!snap["Show Profile"]) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text(
+                              "User don't allow to show details")),
+                    );
+                  } else {
+                    if(_type=="Teacher"){
+                      OnClick(
+                          context,
+                          _type,
+                          snap["ID"],
+                          "${snap['First Name']} ${snap['Middle Name']} ${snap['Last Name']}",
+                          snap["Photo"],
+                          snap["Email Id"],
+                          snap["Phone No"],
+                          snap["Birth Date"],
+                          snap["Blood Group"],
+                          snap["Joining Year"],
+                          snap["Department"],
+                          "Na",
+                          "Na",
+                          "Na");
+                    }
+                    else if(_type=="Student"){
+                      OnClick(
+                          context,
+                          _type,
+                          snap["ID"],
+                          "${snap['First Name']} ${snap['Middle Name']} ${snap['Last Name']}",
+                          snap["Photo"],
+                          snap["Email Id"],
+                          snap["Phone No"],
+                          snap["Birth Date"],
+                          snap["Blood Group"],
+                          snap["Joining Year"],
+                          snap["Branch"],
+                          snap["Semester"],
+                          snap["Class"],
+                          snap["Validity"]
+                      );
+                    }
+
+                  }
+                },
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(snap["Photo"]),
+                  ),
+                  title: Text(
+                      "${snap['First Name']} ${snap['Last Name']}"),
+                  subtitle: Text("${snap['ID']}"),
+                ));
+          }).toList(),
+        );
+      },
+    ),
+  );
+}
+
+ListBox(String _type,String _collection,String _value){
+  return Expanded(
+    child: StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection(_type)
+          .where(_collection, isEqualTo: _value)
+          .snapshots(),
+      builder: (BuildContext context,
+          AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return ListView(
+          children: snapshot.data!.docs.map((snap) {
+            return InkWell(
+                onTap: () async {
+                  if (!snap["Show Profile"]) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text(
+                              "User don't allow to show details")),
+                    );
+                  } else {
+                    if(_type=="Teacher"){
+                      OnClick(
+                          context,
+                          _type,
+                          snap["ID"],
+                          "${snap['First Name']} ${snap['Middle Name']} ${snap['Last Name']}",
+                          snap["Photo"],
+                          snap["Email Id"],
+                          snap["Phone No"],
+                          snap["Birth Date"],
+                          snap["Blood Group"],
+                          snap["Joining Year"],
+                          snap["Department"],
+                          "Na",
+                          "Na",
+                          "Na");
+                    }
+                    else if(_type=="Student"){
+                      OnClick(
+                          context,
+                          _type,
+                          snap["ID"],
+                          "${snap['First Name']} ${snap['Middle Name']} ${snap['Last Name']}",
+                          snap["Photo"],
+                          snap["Email Id"],
+                          snap["Phone No"],
+                          snap["Birth Date"],
+                          snap["Blood Group"],
+                          snap["Joining Year"],
+                          snap["Branch"],
+                          snap["Semester"],
+                          snap["Class"],
+                          snap["Validity"]
+                      );
+                    }
+
+                  }
+                },
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(snap["Photo"]),
+                  ),
+                  title: Text(
+                      "${snap['First Name']} ${snap['Last Name']}"),
+                  subtitle: Text("${snap['ID']}"),
+                ));
+          }).toList(),
+        );
+      },
+    ),
   );
 }

@@ -1,14 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp2/app/util/Functions.dart';
 
-class Faculties extends StatefulWidget {
-  const Faculties({Key? key}) : super(key: key);
+class Students extends StatefulWidget {
+  const Students({Key? key}) : super(key: key);
 
   @override
-  State<Faculties> createState() => _FacultiesState();
+  State<Students> createState() => _StudentsState();
 }
 
-class _FacultiesState extends State<Faculties> {
+class _StudentsState extends State<Students> {
+
   bool isSearch = false;
   bool isBranch = false;
   String _branch = "";
@@ -24,7 +26,7 @@ class _FacultiesState extends State<Faculties> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Faculties"),
+        title: Text("Students"),
         actions: [
           IconButton(
             onPressed: () {
@@ -195,13 +197,13 @@ class _FacultiesState extends State<Faculties> {
                     ),
                     border: OutlineInputBorder(
                         borderSide: BorderSide(
-                      color: Colors.teal,
-                    )),
+                          color: Colors.teal,
+                        )),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                      color: Theme.of(context).primaryColor,
-                      width: 2,
-                    )),
+                          color: Theme.of(context).primaryColor,
+                          width: 2,
+                        )),
                     enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
                     ),
@@ -270,19 +272,21 @@ class _FacultiesState extends State<Faculties> {
           ),
           Visibility(
             visible: controller.text.isEmpty && !isBranch,
-              child:ListBoxInitial("Teacher"),
+            child:ListBoxInitial("Student"),
           ),
           Visibility(
             visible: controller.text.isNotEmpty && !isBranch,
-            child:ListBox("Teacher",_collection, controller.text),
+            child:ListBox("Student",_collection, controller.text),
           ),
           Visibility(
             visible: controller.text.isEmpty && isBranch,
-            child:ListBox("Teacher","Department", _branch),
+            child:ListBox("Student","Branch", _branch),
           ),
         ],
       ),
     );
   }
 
+  
+  
 }

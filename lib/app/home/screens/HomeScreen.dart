@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp2/app/util/EventPage.dart';
-import 'package:myapp2/app/util/NotifiactionPage.dart';
 import 'package:myapp2/app/util/NotificationIcon.dart';
 import 'package:myapp2/app/util/Drawer/SideMenu.dart';
-import 'package:myapp2/app/util/VariablesFile.dart';
 import '../../../app/util/PopupButton.dart';
 import '../../../app/util/About.dart';
 import 'package:myapp2/app/util/Functions.dart';
@@ -17,13 +15,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  NotificationService _notifationService = NotificationService();
   int _index = 0;
 
   @override
   void initState() {
-    _notifationService.initialiseNotification();
-    print(classNames);
     super.initState();
   }
 
@@ -33,14 +28,14 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: InkWell(
             onTap: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => About(),
-              //     ));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => About(),
+                  ));
             },
             child: Text(
-              "Vidush Somani Institute of Technology & Research",
+              "LDRP Institute of Technology & Research",
               style: TextStyle(fontSize: 23),
             )),
         actions: [
@@ -65,16 +60,20 @@ class _HomeScreenState extends State<HomeScreen> {
               return InkWell(
                 onTap: () async {
                   Loading(context);
-                  clicked_event_title = snap["Title"];
-                  clicked_event_coverphoto = snap["Cover Photo"];
-                  clicked_event_about = snap["About"];
-                  clicked_event_link = snap["Link"];
-                  clicked_event_coordinator = snap["Coordinator"];
-                  timestamp = snap["Due Date"] as Timestamp;
-                  clicked_event_duedate = timestamp?.toDate();
+                  Timestamp temp1 = snap["Due Date"] as Timestamp;
+                  DateTime temp2 = temp1.toDate() as DateTime;
                   Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => EventPage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EventPage(
+                                title: snap["Title"],
+                                coverPhoto: snap["Cover Photo"],
+                                about: snap["About"],
+                                coordinator: snap["Coordinator"],
+                                link: snap["Link"],
+                                dueDate: temp2.toString(),
+                              )));
                 },
                 child: Padding(
                   padding:
@@ -83,8 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 160,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(colors: [
-                        Color.fromARGB(200, 212, 146, 200),
-                        Color.fromARGB(100, 50, 200, 163)
+                        Color.fromARGB(100, 202, 202, 202),
+                        Color.fromARGB(100, 103, 103, 103)
                       ]),
                       color: Colors.lightBlueAccent[100],
                       borderRadius: BorderRadius.circular(12),
@@ -112,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 120,
                             width: 120,
                             decoration: BoxDecoration(
-                                color: Colors.grey,
+                                color: Colors.white54,
                                 borderRadius: BorderRadius.circular(12),
                                 image: DecorationImage(
                                     image: NetworkImage(snap["Cover Photo"]),

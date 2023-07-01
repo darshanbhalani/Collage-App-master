@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:myapp2/app/Login/LoginPage.dart';
 import 'package:myapp2/app/util/VariablesFile.dart';
 
@@ -16,20 +15,36 @@ class _LoginChoisePageState extends State<LoginChoisePage> {
     return Scaffold(
         body: Stack(
       children: [
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            height: 200,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+              image: AssetImage("assets/images/Scafoldbg.jpg"),
+              fit: BoxFit.fitWidth,
+            )),
+          ),
+        ),
         Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Login as",
-                  style: GoogleFonts.ubuntu(
-                    fontSize: 35,
-                  ),
+                Container(
+                  height: 200,
+                  width: 300,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/Login.png"),
+                          fit: BoxFit.fill)),
                 ),
                 SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
                 Box("Student"),
                 SizedBox(
@@ -41,12 +56,16 @@ class _LoginChoisePageState extends State<LoginChoisePage> {
                 ),
                 Box("Admin"),
                 SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
                   height: 10,
                 ),
-                Text("Note : Please contect admin if you don't have account"),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                      "Note : Please contect admin if you don't have account"),
+                ),
+                const SizedBox(
+                  height: 60,
+                ),
               ],
             ),
           ),
@@ -66,7 +85,7 @@ class _LoginChoisePageState extends State<LoginChoisePage> {
           borderRadius: BorderRadius.circular(25)),
       child: TextButton(
         onPressed: () {
-          current_user_type = _lable;
+          cuType = _lable;
           Navigator.push(
               context,
               MaterialPageRoute(
