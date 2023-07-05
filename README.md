@@ -1,18 +1,6 @@
 # Collage-App
+A cross-plateform collage app with multiple functions. 
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 ![Screenshot_2023-07-01-16-07-05-05_69dbd793de4129444adba5f3ac4214a3](https://github.com/darshanbhalani/Collage-App-master/assets/108427824/243335c8-1712-4750-a190-2fe226a45633)
 ![Screenshot_2023-07-01-16-07-08-81_69dbd793de4129444adba5f3ac4214a3](https://github.com/darshanbhalani/Collage-App-master/assets/108427824/50d52e0c-274a-43fd-9176-fbcb7fdd9aed)
